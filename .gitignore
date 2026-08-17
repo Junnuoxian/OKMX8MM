@@ -1,0 +1,7 @@
+**/build/
+**/build-*/
+**/runtime-data/
+**/packages/
+**/_package/
+**/config/mqtt.env
+**/config/can.env
