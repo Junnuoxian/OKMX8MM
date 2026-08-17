@@ -60,11 +60,9 @@ MQTT_HOST=test sh scripts/publish-mqtt-outbox.sh --dry-run
 确认格式后，设置真实 MQTT 参数再发布：
 
 ```sh
-export MQTT_HOST=your-mqtt-host
-export MQTT_PORT=1883
-export MQTT_USER=your-user
-export MQTT_PASSWORD=your-password
-sh scripts/publish-mqtt-outbox.sh
+cp config/mqtt.env.example config/mqtt.env
+vi config/mqtt.env
+sh scripts/publish-mqtt-outbox.sh --env config/mqtt.env
 ```
 
 发布成功后，如果确认可以清空待发送文件：

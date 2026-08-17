@@ -33,6 +33,7 @@ $items = @(
     'include',
     'src',
     'scripts',
+    'config',
     'examples',
     'tests'
 )

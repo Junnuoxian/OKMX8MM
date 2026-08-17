@@ -143,6 +143,12 @@ sh scripts/check-board-env.sh
 
 MQTT 上传看 `BOARD_RUN.md` 的“上传 MQTT”部分。
 
+MQTT 配置样例：
+
+```text
+config/mqtt.env.example
+```
+
 ## 生成开发板压缩包
 
 ```powershell

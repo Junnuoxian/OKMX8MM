@@ -2,6 +2,7 @@ build/
 runtime-data/
 packages/
 _package/
+config/mqtt.env
 .vs/
 .vscode/
 *.user

@@ -5,6 +5,7 @@ usage() {
     cat <<'EOF'
 Usage:
   MQTT_HOST=host sh scripts/publish-mqtt-outbox.sh [--file outbox.jsonl] [--dry-run] [--clear-on-success]
+  sh scripts/publish-mqtt-outbox.sh --env config/mqtt.env [--dry-run]
 
 Required:
   MQTT_HOST       MQTT server name or IP
@@ -19,6 +20,7 @@ EOF
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 DEMO_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
 OUTBOX_FILE="$DEMO_ROOT/runtime-data/a53-mqtt-outbox.jsonl"
+ENV_FILE=
 DRY_RUN=0
 CLEAR_ON_SUCCESS=0
 
@@ -27,6 +29,11 @@ while [ "$#" -gt 0 ]; do
         --file)
             [ "$#" -ge 2 ] || { usage; exit 2; }
             OUTBOX_FILE=$2
+            shift 2
+            ;;
+        --env)
+            [ "$#" -ge 2 ] || { usage; exit 2; }
+            ENV_FILE=$2
             shift 2
             ;;
         --dry-run)
@@ -47,6 +54,14 @@ while [ "$#" -gt 0 ]; do
             ;;
     esac
 done
+
+if [ -n "$ENV_FILE" ]; then
+    [ -f "$ENV_FILE" ] || { printf 'Env file not found: %s\n' "$ENV_FILE" >&2; exit 1; }
+    set -a
+    # shellcheck disable=SC1090
+    . "$ENV_FILE"
+    set +a
+fi
 
 [ -n "${MQTT_HOST:-}" ] || { printf 'MQTT_HOST is required\n' >&2; exit 2; }
 command -v jq >/dev/null 2>&1 || { printf 'jq is required\n' >&2; exit 1; }
