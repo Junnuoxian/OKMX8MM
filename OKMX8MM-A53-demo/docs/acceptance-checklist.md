@@ -15,6 +15,8 @@
 - [ ] 存储文件能看到 `ai0` 到 `ai9`。
 - [ ] 存储游标能看到 `sequence`。
 - [ ] 存储游标能看到 `line_checksum`。
+- [ ] 执行 `.\build\okmx8mm-a53-demo.exe --check-storage runtime-data\a53-storage.jsonl`。
+- [ ] 存储游标校验能通过。
 - [ ] CAN 记录能看到 `CAN id=0x321`。
 
 ## 开发板基础验收
@@ -26,6 +28,7 @@
 - [ ] 生成 `build-linux/okmx8mm-a53-demo`。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --cycles 3`。
 - [ ] 三个输出文件都有内容。
+- [ ] 执行 `./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl` 能通过。
 
 ## 文本输入验收
 

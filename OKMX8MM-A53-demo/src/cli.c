@@ -49,6 +49,7 @@ int a53_cli_parse(int argc, const char **argv, a53_cli_options_t *options)
 
     options->source_kind = A53_SOURCE_REPLAY;
     options->source_path = 0;
+    options->check_storage_path = 0;
     options->cycles = 5;
     options->storage_path = "runtime-data/a53-storage.jsonl";
     options->mqtt_outbox_path = "runtime-data/a53-mqtt-outbox.jsonl";
@@ -63,6 +64,11 @@ int a53_cli_parse(int argc, const char **argv, a53_cli_options_t *options)
             }
             options->source_kind = A53_SOURCE_FILE;
             options->source_path = argv[++index];
+        } else if (strcmp(argv[index], "--check-storage") == 0) {
+            if (index + 1 >= argc) {
+                return -1;
+            }
+            options->check_storage_path = argv[++index];
         } else if (strcmp(argv[index], "--cycles") == 0) {
             if (index + 1 >= argc || parse_cycles(argv[++index], &options->cycles) != 0) {
                 return -1;

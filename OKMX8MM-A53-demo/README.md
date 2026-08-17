@@ -75,6 +75,12 @@ runtime-data\a53-can-trace.log
 
 每处理一批 M4 数据，三个文件各增加一行。
 
+校验存储游标：
+
+```powershell
+.\build\okmx8mm-a53-demo.exe --check-storage runtime-data\a53-storage.jsonl
+```
+
 常用参数：
 
 - `--cycles N`：处理 N 批数据。
@@ -84,6 +90,7 @@ runtime-data\a53-can-trace.log
 - `--can-trace file`：CAN 内容写入文件。
 - `--topic name`：设置 MQTT topic。
 - `--can-id 0x321`：设置 CAN ID。
+- `--check-storage file`：检查存储文件和 `.cursor` 是否匹配。
 
 ## 输出说明
 

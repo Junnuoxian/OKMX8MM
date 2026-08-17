@@ -61,6 +61,12 @@ line_checksum=1234ABCD
 | `line_bytes` | 最新一行字节数 |
 | `line_checksum` | 最新一行的 FNV-1a 校验 |
 
+校验命令：
+
+```sh
+./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl
+```
+
 ## MQTT Outbox
 
 默认文件：

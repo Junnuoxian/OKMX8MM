@@ -49,6 +49,12 @@ cat runtime-data/a53-mqtt-outbox.jsonl
 cat runtime-data/a53-can-trace.log
 ```
 
+9. 校验存储游标：
+
+```sh
+./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl
+```
+
 ## 上传 MQTT
 
 先只看待发送内容，不发到云：

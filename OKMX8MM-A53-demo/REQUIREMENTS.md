@@ -51,6 +51,7 @@ A53 需要支持三种阶段：
 - 每批数据保存一行 JSONL。
 - 默认写入 `runtime-data/a53-storage.jsonl`。
 - 同时写入同名 `.cursor` 文件，记录最新批次、写入位置和行校验。
+- 支持 `--check-storage file` 检查存储文件和 `.cursor` 是否匹配。
 - 可通过 `--storage file` 指定输出文件。
 - 开发板联调时可把输出文件放到 SD 卡挂载目录。
 
@@ -84,6 +85,7 @@ A53 需要支持三种阶段：
 - 三个输出文件都有内容。
 - 存储文件能看到 `ai0` 到 `ai9`。
 - 存储 `.cursor` 文件能看到最新 `sequence`。
+- `--check-storage runtime-data/a53-storage.jsonl` 能通过。
 - CAN 记录能看到 `CAN id=0x321`。
 
 第二阶段验收：

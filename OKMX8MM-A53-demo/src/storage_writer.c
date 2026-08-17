@@ -2,6 +2,7 @@
 #include "file_utils.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 static int build_cursor_path(const char *path, char *cursor_path, size_t capacity)
@@ -67,6 +68,93 @@ static int write_storage_cursor(const char *path,
         (unsigned int)line_checksum);
 
     return fclose(file);
+}
+
+static const char *base_name(const char *path)
+{
+    const char *file_name;
+
+    file_name = strrchr(path, '/');
+    if (file_name == NULL) {
+        file_name = strrchr(path, '\\');
+    }
+
+    return file_name == NULL ? path : file_name + 1;
+}
+
+int a53_storage_validate_cursor(const char *path)
+{
+    char cursor_path[512];
+    char cursor_text[512];
+    char file_name[256];
+    char expected_sequence[64];
+    char line[1024];
+    FILE *cursor_file;
+    FILE *storage_file;
+    size_t cursor_size;
+    size_t read_size;
+    unsigned int sequence;
+    long byte_offset;
+    long line_bytes;
+    unsigned int line_checksum;
+
+    if (path == NULL || build_cursor_path(path, cursor_path, sizeof(cursor_path)) != 0) {
+        return -1;
+    }
+
+    cursor_file = fopen(cursor_path, "rb");
+    if (cursor_file == NULL) {
+        return -1;
+    }
+    cursor_size = fread(cursor_text, 1, sizeof(cursor_text) - 1, cursor_file);
+    if (ferror(cursor_file) || fclose(cursor_file) != 0 || cursor_size == 0) {
+        return -1;
+    }
+    cursor_text[cursor_size] = '\0';
+
+    if (sscanf(cursor_text,
+            "file=%255[^\n]\nsequence=%u\nbyte_offset=%ld\nline_bytes=%ld\nline_checksum=%8X\n",
+            file_name,
+            &sequence,
+            &byte_offset,
+            &line_bytes,
+            &line_checksum) != 5) {
+        return -1;
+    }
+    if (strcmp(file_name, base_name(path)) != 0 ||
+        byte_offset <= 0 ||
+        line_bytes <= 0 ||
+        line_bytes >= (long)sizeof(line) ||
+        byte_offset < line_bytes) {
+        return -1;
+    }
+
+    storage_file = fopen(path, "rb");
+    if (storage_file == NULL) {
+        return -1;
+    }
+    if (fseek(storage_file, byte_offset - line_bytes, SEEK_SET) != 0) {
+        fclose(storage_file);
+        return -1;
+    }
+    read_size = fread(line, 1, (size_t)line_bytes, storage_file);
+    if (ferror(storage_file) || fclose(storage_file) != 0 || read_size != (size_t)line_bytes) {
+        return -1;
+    }
+    line[read_size] = '\0';
+
+    if (checksum_fnv1a(line, read_size) != (uint32_t)line_checksum) {
+        return -1;
+    }
+
+    if (snprintf(expected_sequence, sizeof(expected_sequence), "\"sequence\":%u", sequence) < 0) {
+        return -1;
+    }
+    if (strstr(line, expected_sequence) == NULL) {
+        return -1;
+    }
+
+    return 0;
 }
 
 int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch)
