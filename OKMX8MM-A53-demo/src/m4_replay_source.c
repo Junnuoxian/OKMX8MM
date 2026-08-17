@@ -1,6 +1,7 @@
-#include "a53_demo.h"
+#include "m4_source_internal.h"
 
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
 
 int a53_m4_replay_open(a53_m4_source_t *source)
@@ -8,6 +9,8 @@ int a53_m4_replay_open(a53_m4_source_t *source)
     if (source == NULL) {
         return -1;
     }
+    memset(source, 0, sizeof(*source));
+    source->kind = A53_SOURCE_REPLAY;
     source->next_sequence = 0;
     return 0;
 }
@@ -20,6 +23,10 @@ int a53_m4_source_read(a53_m4_source_t *source, a53_m4_batch_t *batch)
 
     if (source == NULL || batch == NULL) {
         return -1;
+    }
+
+    if (source->kind == A53_SOURCE_FILE) {
+        return a53_m4_file_read_next(source, batch);
     }
 
     sequence = source->next_sequence++;
@@ -47,6 +54,10 @@ int a53_m4_source_read(a53_m4_source_t *source, a53_m4_batch_t *batch)
 void a53_m4_source_close(a53_m4_source_t *source)
 {
     if (source != NULL) {
+        if (source->file != NULL) {
+            fclose(source->file);
+            source->file = NULL;
+        }
         source->next_sequence = 0;
     }
 }

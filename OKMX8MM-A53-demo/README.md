@@ -26,10 +26,16 @@
 
 ### 2. 运行
 
-参数 `3` 表示处理 3 批数据：
+默认使用内置模拟数据。参数 `3` 表示处理 3 批数据：
 
 ```powershell
 .\build\okmx8mm-a53-demo.exe 3
+```
+
+也可以读文本输入，方便以后替换真实 M4 通信：
+
+```powershell
+.\build\okmx8mm-a53-demo.exe --file .\examples\m4-input.csv --cycles 3
 ```
 
 ### 3. 查看结果
@@ -67,13 +73,24 @@ runtime-data\a53-can-trace.log
 
 ## 换成真实 M4 数据
 
-后续只需要替换：
+现在已有两种输入：
+
+- `A53_SOURCE_REPLAY`：内置模拟数据。
+- `A53_SOURCE_FILE`：读取文本输入，每行代表一批 M4 数据。
+
+文本输入格式：
 
 ```text
-src\m4_replay_source.c
+sequence,ai0,ai1,ai2,ai3,ai4,ai5,ai6,ai7,ai8,ai9,di_bits,speed_pulse_delta,speed_period_us
 ```
 
-保留 `a53_m4_batch_t` 字段含义不变，把 `a53_m4_source_read()` 改为真实 RPMsg、串口或其他核间通信读取。
+后续接真实 M4 通信时，优先替换：
+
+```text
+src\m4_file_source.c
+```
+
+保留 `a53_m4_batch_t` 字段含义不变，把文件读取改为真实 RPMsg、串口或其他核间通信读取。
 
 存储、MQTT、CAN 三条处理流程可以先保持不变。
 

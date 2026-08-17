@@ -1,6 +1,7 @@
 #ifndef A53_DEMO_H
 #define A53_DEMO_H
 
+#include <stdio.h>
 #include <stdint.h>
 
 enum {
@@ -8,6 +9,11 @@ enum {
     A53_BATCH_SAMPLE_COUNT = 10,
     A53_SAMPLE_RATE_HZ = 2000
 };
+
+typedef enum {
+    A53_SOURCE_REPLAY = 0,
+    A53_SOURCE_FILE = 1
+} a53_source_kind_t;
 
 typedef struct {
     uint32_t sequence;
@@ -23,10 +29,20 @@ typedef struct {
 } a53_m4_batch_t;
 
 typedef struct {
+    a53_source_kind_t kind;
     uint32_t next_sequence;
+    FILE *file;
 } a53_m4_source_t;
 
 typedef struct {
+    a53_source_kind_t source_kind;
+    const char *source_path;
+    uint32_t cycles;
+} a53_cli_options_t;
+
+typedef struct {
+    a53_source_kind_t source_kind;
+    const char *source_path;
     const char *storage_path;
     const char *mqtt_outbox_path;
     const char *can_trace_path;
@@ -36,9 +52,11 @@ typedef struct {
 } a53_pipeline_config_t;
 
 int a53_m4_replay_open(a53_m4_source_t *source);
+int a53_m4_file_open(a53_m4_source_t *source, const char *path);
 int a53_m4_source_read(a53_m4_source_t *source, a53_m4_batch_t *batch);
 void a53_m4_source_close(a53_m4_source_t *source);
 
+int a53_cli_parse(int argc, const char **argv, a53_cli_options_t *options);
 int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch);
 int a53_mqtt_outbox_append(const char *path, const char *topic, const a53_m4_batch_t *batch);
 int a53_can_trace_append(const char *path, uint32_t can_id, const a53_m4_batch_t *batch);

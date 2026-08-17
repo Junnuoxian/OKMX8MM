@@ -14,7 +14,11 @@ int a53_pipeline_run(const a53_pipeline_config_t *config)
         return -1;
     }
 
-    if (a53_m4_replay_open(&source) != 0) {
+    if (config->source_kind == A53_SOURCE_FILE) {
+        if (a53_m4_file_open(&source, config->source_path) != 0) {
+            return -1;
+        }
+    } else if (a53_m4_replay_open(&source) != 0) {
         return -1;
     }
 
