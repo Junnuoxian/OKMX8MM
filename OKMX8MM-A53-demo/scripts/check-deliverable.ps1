@@ -59,6 +59,7 @@ $requiredFiles = @(
     'scripts/check-board-env.sh',
     'scripts/package-board.ps1',
     'scripts/check-deliverable.ps1',
+    'scripts/board-smoke-test.sh',
     'scripts/publish-mqtt-outbox.sh',
     'scripts/send-can-trace.sh',
     'config/a53-demo.conf.example',
@@ -81,6 +82,7 @@ Require-Literal $contents['REQUIREMENTS.md'] 'A53：负责接收数据、保存�
 Require-Literal $contents['REQUIREMENTS.md'] 'M4 批次序号连续性' 'REQUIREMENTS.md'
 Require-Literal $contents['REQUIREMENTS.md'] '运行状态文件' 'REQUIREMENTS.md'
 Require-Literal $contents['BOARD_RUN.md'] 'sh scripts/check-board-env.sh' 'BOARD_RUN.md'
+Require-Literal $contents['BOARD_RUN.md'] 'sh scripts/board-smoke-test.sh' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] 'a53-status.json' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] '--config config/a53-demo.conf' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] '--check-storage runtime-data/a53-storage.jsonl' 'BOARD_RUN.md'
@@ -121,6 +123,7 @@ if (-not (Test-Path -LiteralPath $zipPath -PathType Leaf)) {
             'OKMX8MM-A53-demo/docs/protocol-guide.md',
             'OKMX8MM-A53-demo/docs/acceptance-checklist.md',
             'OKMX8MM-A53-demo/scripts/check-deliverable.ps1',
+            'OKMX8MM-A53-demo/scripts/board-smoke-test.sh',
             'OKMX8MM-A53-demo/scripts/publish-mqtt-outbox.sh',
             'OKMX8MM-A53-demo/scripts/send-can-trace.sh',
             'OKMX8MM-A53-demo/config/a53-demo.conf.example',

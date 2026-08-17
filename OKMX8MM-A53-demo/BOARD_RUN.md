@@ -20,19 +20,27 @@ sh scripts/check-board-env.sh
 sh scripts/build-linux.sh
 ```
 
-5. 运行内置模拟数据：
+5. 一键冒烟测试：
+
+```sh
+sh scripts/board-smoke-test.sh
+```
+
+如果它最后打印 `[OK] board smoke test passed`，说明基础运行、状态文件、存储校验、CAN 记录格式都正常。
+
+6. 运行内置模拟数据：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --cycles 3
 ```
 
-6. 运行文本输入数据：
+7. 运行文本输入数据：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --file examples/m4-input.csv --cycles 3
 ```
 
-7. 如果要写到 SD 卡挂载目录，运行时指定输出文件：
+8. 如果要写到 SD 卡挂载目录，运行时指定输出文件：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --cycles 3 \
@@ -42,7 +50,7 @@ sh scripts/build-linux.sh
   --status /mnt/sdcard/status.json
 ```
 
-8. 也可以用配置文件运行：
+9. 也可以用配置文件运行：
 
 ```sh
 cp config/a53-demo.conf.example config/a53-demo.conf
@@ -50,7 +58,7 @@ vi config/a53-demo.conf
 ./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf
 ```
 
-9. 查看输出：
+10. 查看输出：
 
 ```sh
 cat runtime-data/a53-storage.jsonl
@@ -59,7 +67,7 @@ cat runtime-data/a53-can-trace.log
 cat runtime-data/a53-status.json
 ```
 
-10. 校验存储游标：
+11. 校验存储游标：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl
@@ -123,6 +131,7 @@ sh scripts/send-can-trace.sh --clear-on-success
 ## 判断是否正常
 
 - 程序提示写入 3 批数据。
+- 冒烟测试能看到 `[OK] board smoke test passed`。
 - 三个输出文件都有内容。
 - `a53-status.json` 能看到 `ok=true`。
 - `a53-storage.jsonl` 能看到 `ai0` 到 `ai9`。

@@ -33,6 +33,8 @@
 - [ ] 能看到 `runtime-data is writable`。
 - [ ] 执行 `sh scripts/build-linux.sh`。
 - [ ] 生成 `build-linux/okmx8mm-a53-demo`。
+- [ ] 执行 `sh scripts/board-smoke-test.sh`。
+- [ ] 能看到 `[OK] board smoke test passed`。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --cycles 3`。
 - [ ] 复制 `config/a53-demo.conf.example` 为 `config/a53-demo.conf`。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf`。
