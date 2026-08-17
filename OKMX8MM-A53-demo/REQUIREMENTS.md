@@ -108,3 +108,13 @@ A53 需要支持三种阶段：
 6. 把存储文件切到 SD 卡。
 7. 配置 MQTT 并执行发布脚本。
 8. 把 CAN 记录替换成真实 CAN 发送。
+
+## 参考移植
+
+详细映射看：
+
+```text
+docs/reference-migration-map.md
+docs/protocol-guide.md
+docs/acceptance-checklist.md
+```

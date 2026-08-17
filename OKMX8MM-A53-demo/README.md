@@ -20,6 +20,14 @@
 REQUIREMENTS.md
 ```
 
+移植和协议说明：
+
+```text
+docs/reference-migration-map.md
+docs/protocol-guide.md
+docs/acceptance-checklist.md
+```
+
 ## 新手操作
 
 ### 1. 编译

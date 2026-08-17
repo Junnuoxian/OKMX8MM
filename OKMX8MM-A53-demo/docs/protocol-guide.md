@@ -1,0 +1,94 @@
+# 数据与协议说明
+
+## 数据来源
+
+A53 当前支持两种数据来源：
+
+- 内置模拟数据：程序自动生成。
+- 文本输入数据：每行代表一批 M4 数据。
+
+文本输入格式：
+
+```text
+sequence,ai0,ai1,ai2,ai3,ai4,ai5,ai6,ai7,ai8,ai9,di_bits,speed_pulse_delta,speed_period_us
+```
+
+字段说明：
+
+| 字段 | 含义 |
+| --- | --- |
+| `sequence` | 批次序号 |
+| `ai0` 到 `ai9` | 10 路模拟量 |
+| `di_bits` | 数字量位图 |
+| `speed_pulse_delta` | 转速脉冲增量 |
+| `speed_period_us` | 转速周期，单位微秒 |
+
+## 存储 JSONL
+
+默认文件：
+
+```text
+runtime-data/a53-storage.jsonl
+```
+
+一行示例：
+
+```json
+{"sequence":0,"source":"m4-replay","sample_rate_hz":2000,"samples":10,"di_bits":1,"speed_pulse_delta":11,"speed_period_us":50000,"first_sample":{"ai0":1000,"ai1":1001,"ai2":1002,"ai3":1003,"ai4":1004,"ai5":1005,"ai6":1006,"ai7":1007,"ai8":1008,"ai9":1009}}
+```
+
+## MQTT Outbox
+
+默认文件：
+
+```text
+runtime-data/a53-mqtt-outbox.jsonl
+```
+
+一行示例：
+
+```json
+{"topic":"mine-truck/demo1","payload":{"sequence":0,"ai0":1000,"di_bits":1,"speed_pulse_delta":11}}
+```
+
+发送方式：
+
+```sh
+MQTT_HOST=test sh scripts/publish-mqtt-outbox.sh --dry-run
+```
+
+## CAN Trace
+
+默认文件：
+
+```text
+runtime-data/a53-can-trace.log
+```
+
+一行示例：
+
+```text
+CAN id=0x321 seq=0 ai0=1000 di=0x01 speed_pulse=11 speed_period_us=50000
+```
+
+当前 CAN dry-run 会转换成：
+
+```text
+cansend can0 321#0000E803010B0000
+```
+
+payload 说明：
+
+| 字节 | 含义 |
+| --- | --- |
+| 0-1 | sequence，小端 |
+| 2-3 | ai0，小端 |
+| 4 | di_bits |
+| 5-6 | speed_pulse_delta，小端 |
+| 7 | 保留 |
+
+## 后续要统一的地方
+
+- 存储 JSON 后续参考 `modules/storage` 增加恢复和空间检查。
+- MQTT 后续参考 `modules/mqtt` 统一编码。
+- CAN 后续参考 `modules/can` 统一字节打包。

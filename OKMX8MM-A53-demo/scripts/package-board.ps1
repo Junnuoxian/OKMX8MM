@@ -34,6 +34,7 @@ $items = @(
     'src',
     'scripts',
     'config',
+    'docs',
     'examples',
     'tests'
 )
