@@ -47,7 +47,7 @@ STM32 是一个 MCU 把采集、存储、MQTT、CAN、OTA 都做了。OKMX8MM �
 OKMX8MM-Demo2
 |-- m4       M4采集工程
 |-- a53      A53网关工程
-|-- docs     新人说明和验收清单
+|-- docs     新人说明和操作清单
 |-- scripts  Demo2自检和打包脚本
 |-- examples 预留样例
 ```
@@ -90,16 +90,21 @@ D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\m4\demo1\README.md
 D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\newcomer-runbook.txt
 ```
 
-## 当前完成度
+## 上板实测顺序
 
-按“除真实上板实测以外的软件准备”计算，Demo2 目标是到 80% 左右：
+按下面顺序做，不要一开始就全部接上：
 
-- 架构已明确。
-- M4采集框架已集中。
-- A53存储、MQTT、CAN、状态、心跳已集中。
-- M4和A53主机测试已接入总自检。
-- STM32参考映射已整理。
-- 新人操作步骤已整理。
-- 自检和打包入口已提供。
+1. 先在电脑上运行 Demo2 总自检。
+2. 把 A53 程序放到 OKMX8MM 开发板 Linux 里运行。
+3. 确认 SD 卡可以写入采集文件。
+4. 用 CAN 工具确认 CAN 帧可以发出。
+5. 配置 MQTT，确认云平台能收到数据。
+6. 启动 M4，确认调试串口有日志。
+7. 接外接采集板，确认 M4 能读取 RS485 数据。
+8. 把 M4 采集数据送到 A53，形成完整链路。
 
-还不能说 100%，因为真实开发板、真实采集板、真实SD卡、真实云平台和真实CAN总线还没有实测。
+详细步骤看：
+
+```text
+D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\newcomer-runbook.txt
+```

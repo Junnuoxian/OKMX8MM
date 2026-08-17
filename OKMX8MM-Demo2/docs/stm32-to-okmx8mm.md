@@ -40,9 +40,9 @@ A53 = 网关层
 | `applications/device-settings` | 参数配置 | `a53` |
 | `applications/daemon` | 看门和恢复 | `a53` |
 
-## Demo2 当前数据格式
+## Demo2 数据格式
 
-A53 当前使用统一批次格式：
+A53 使用统一批次格式：
 
 ```text
 sequence,ai0,ai1,ai2,ai3,ai4,ai5,ai6,ai7,ai8,ai9,di_bits,speed_pulse_delta,speed_period_us
@@ -58,21 +58,15 @@ sequence,ai0,ai1,ai2,ai3,ai4,ai5,ai6,ai7,ai8,ai9,di_bits,speed_pulse_delta,speed
 
 如果真实硬件只有 8 路模拟量，剩余两路先填 0。后续确认真实硬件有 10 路时，再扩展 M4 寄存器映射。
 
-## 当前达到 80% 的含义
+## 操作顺序
 
-80% 不是说已经实车可用，而是说：
+新手按这个顺序推进：
 
-- 软件架构完整。
-- M4 和 A53 分工清楚。
-- A53 端流程能模拟跑通。
-- 文件存储、MQTT队列、CAN帧、状态、心跳都有输出。
-- 后续只需要把模拟输入替换成真实 M4 数据，再做硬件实测。
-
-剩余 20% 主要是：
-
-- M4 和 A53 真实通信联调。
-- 外接采集板实测。
-- SD卡长时间写入测试。
-- MQTT真实云平台测试。
-- CAN总线实测。
-- OTA真实升级测试。
+1. 先跑 Demo2 总自检，确认电脑端流程正常。
+2. 再把 A53 程序放到开发板 Linux 里运行。
+3. 确认 SD 卡能写入 `samples.jsonl`、`status.json`、`heartbeat.jsonl`。
+4. 确认 MQTT 待发文件能被脚本上传到云平台。
+5. 确认 CAN 记录能转换成真实 CAN 帧发出。
+6. 再启动 M4，确认 M4 调试串口输出正常。
+7. 接外接采集板，确认 M4 能读取模拟量和数字量。
+8. 最后把 M4 数据送到 A53，检查 SD、云平台、CAN 三路输出。
