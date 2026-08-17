@@ -16,7 +16,7 @@ A53负责存SD卡、上传云平台、发CAN给矿车。
 3. 先跑A53
 
 进入：
-D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53
+OKMX8MM-Demo2\a53
 
 执行：
 .\scripts\test-windows.ps1
@@ -45,7 +45,7 @@ runtime-data\a53-heartbeat.jsonl
 5. 再看M4
 
 进入：
-D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\m4
+OKMX8MM-Demo2\m4
 
 重点看：
 demo1\README.md

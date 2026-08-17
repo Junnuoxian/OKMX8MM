@@ -11,7 +11,7 @@ D:\Codex_AI\YY_Demo\项目一\OKMX8MM-Sensor-Gateway
 当前 A53 示例：
 
 ```text
-D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-A53-demo
+OKMX8MM-A53-demo
 ```
 
 ## 移植原则

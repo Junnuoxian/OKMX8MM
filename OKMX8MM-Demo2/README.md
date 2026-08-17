@@ -57,14 +57,14 @@ OKMX8MM-Demo2
 第一步：先跑 A53 模拟流程。
 
 ```powershell
-cd D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53
+cd OKMX8MM-Demo2\a53
 .\scripts\test-windows.ps1
 ```
 
 也可以直接跑 Demo2 总自检：
 
 ```powershell
-cd D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2
+cd OKMX8MM-Demo2
 .\scripts\check-demo2.ps1
 ```
 
@@ -81,13 +81,13 @@ runtime-data\a53-heartbeat.jsonl
 第三步：看 M4 采集说明。
 
 ```text
-D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\m4\demo1\README.md
+OKMX8MM-Demo2\m4\demo1\README.md
 ```
 
 第四步：看 Demo2 操作流程。
 
 ```text
-D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\newcomer-runbook.txt
+OKMX8MM-Demo2\docs\newcomer-runbook.txt
 ```
 
 ## 上板实测顺序
@@ -106,5 +106,5 @@ D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\newcomer-runbook.txt
 详细步骤看：
 
 ```text
-D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\newcomer-runbook.txt
+OKMX8MM-Demo2\docs\newcomer-runbook.txt
 ```

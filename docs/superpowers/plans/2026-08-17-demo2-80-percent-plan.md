@@ -14,7 +14,7 @@
 - Keep M4 limited to analog/digital acquisition and batch framing.
 - Keep A53 responsible for SD storage, MQTT upload preparation, CAN transmission preparation, heartbeat, configuration, and OTA readiness.
 - Do not claim real SD, cloud, CAN bus, external acquisition board, or M4-A53 communication has been hardware-tested.
-- Keep all learner-facing deliverables inside `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2`.
+- Keep all learner-facing deliverables inside `OKMX8MM-Demo2`.
 - Manuals and tutorials must not use the Chinese word `地址`.
 
 ---
@@ -22,10 +22,10 @@
 ### Task 1: Create the self-contained Demo2 delivery tree
 
 **Files:**
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\README.md`
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\`
-- Copy: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-M4-demo1\` into `OKMX8MM-Demo2\m4\`
-- Copy: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-A53-demo\` into `OKMX8MM-Demo2\a53\`
+- Create: `OKMX8MM-Demo2\README.md`
+- Create: `OKMX8MM-Demo2\docs\`
+- Copy: `OKMX8MM-M4-demo1\` into `OKMX8MM-Demo2\m4\`
+- Copy: `OKMX8MM-A53-demo\` into `OKMX8MM-Demo2\a53\`
 
 **Interfaces:**
 - Produces one entry folder with independent `m4`, `a53`, and `docs` sections.
@@ -39,8 +39,8 @@
 ### Task 2: Add the STM32-to-OKMX8MM functional migration map
 
 **Files:**
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\stm32-to-okmx8mm.md`
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\newcomer-runbook.txt`
+- Create: `OKMX8MM-Demo2\docs\stm32-to-okmx8mm.md`
+- Create: `OKMX8MM-Demo2\docs\newcomer-runbook.txt`
 
 **Interfaces:**
 - Documents the mapping:
@@ -60,10 +60,10 @@
 ### Task 3: Add A53 heartbeat and OTA-readiness outputs
 
 **Files:**
-- Modify: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53\src\`
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53\config\ota.env.example`
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53\scripts\check-ota-readiness.sh`
-- Test: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53\tests\`
+- Modify: `OKMX8MM-Demo2\a53\src\`
+- Create: `OKMX8MM-Demo2\a53\config\ota.env.example`
+- Create: `OKMX8MM-Demo2\a53\scripts\check-ota-readiness.sh`
+- Test: `OKMX8MM-Demo2\a53\tests\`
 
 **Interfaces:**
 - Each successful batch updates the existing status record and writes a heartbeat JSONL record.
@@ -79,10 +79,10 @@
 ### Task 4: Add a real-input adapter boundary for M4-to-A53 integration
 
 **Files:**
-- Modify: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53\src\m4_file_source.c`
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53\scripts\read-m4-serial.sh`
-- Modify: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\m4\demo1\src\`
-- Test: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53\tests\`
+- Modify: `OKMX8MM-Demo2\a53\src\m4_file_source.c`
+- Create: `OKMX8MM-Demo2\a53\scripts\read-m4-serial.sh`
+- Modify: `OKMX8MM-Demo2\m4\demo1\src\`
+- Test: `OKMX8MM-Demo2\a53\tests\`
 
 **Interfaces:**
 - Keep `a53_m4_batch_t` stable.
@@ -98,10 +98,10 @@
 ### Task 5: Package and verify Demo2
 
 **Files:**
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\scripts\package-demo2.ps1`
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\scripts\check-demo2.ps1`
-- Create: `D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\docs\acceptance-checklist.txt`
-- Update: `D:\Codex_AI\YY_Demo\OKMX8MM\README.md`
+- Create: `OKMX8MM-Demo2\scripts\package-demo2.ps1`
+- Create: `OKMX8MM-Demo2\scripts\check-demo2.ps1`
+- Create: `OKMX8MM-Demo2\docs\acceptance-checklist.txt`
+- Update: `README.md`
 
 **Interfaces:**
 - The package contains source, docs, examples, and scripts but excludes generated build/runtime output and private credentials.
