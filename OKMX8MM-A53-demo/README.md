@@ -135,6 +135,14 @@ BOARD_RUN.md
 sh scripts/check-board-env.sh
 ```
 
+## 生成开发板压缩包
+
+```powershell
+.\scripts\package-board.ps1
+```
+
+生成后看 `packages` 目录。
+
 ## 下一步
 
 1. 在 OKMX8MM 开发板上确认 A53 Linux 的编译环境。

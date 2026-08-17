@@ -1,5 +1,7 @@
 build/
 runtime-data/
+packages/
+_package/
 .vs/
 .vscode/
 *.user
