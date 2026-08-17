@@ -14,6 +14,7 @@
 - [ ] 生成 `runtime-data/a53-can-trace.log`。
 - [ ] 存储文件能看到 `ai0` 到 `ai9`。
 - [ ] 存储游标能看到 `sequence`。
+- [ ] 存储游标能看到 `line_checksum`。
 - [ ] CAN 记录能看到 `CAN id=0x321`。
 
 ## 开发板基础验收

@@ -66,6 +66,7 @@ static int writers_create_beginner_readable_output_files(void)
     TEST_ASSERT_TRUE(strstr(text, "sequence=0") != NULL);
     TEST_ASSERT_TRUE(strstr(text, "byte_offset=") != NULL);
     TEST_ASSERT_TRUE(strstr(text, "line_bytes=") != NULL);
+    TEST_ASSERT_TRUE(strstr(text, "line_checksum=") != NULL);
     first_size = file_size(storage_path);
     TEST_ASSERT_TRUE(first_size > 0);
     TEST_ASSERT_EQ_INT(0, a53_storage_append_batch(storage_path, &second_batch));
@@ -75,6 +76,7 @@ static int writers_create_beginner_readable_output_files(void)
     TEST_ASSERT_TRUE(strstr(text, "sequence=1") != NULL);
     TEST_ASSERT_TRUE(sscanf(strstr(text, "line_bytes="), "line_bytes=%ld", &line_bytes) == 1);
     TEST_ASSERT_EQ_INT(second_size - first_size, line_bytes);
+    TEST_ASSERT_TRUE(strstr(text, "line_checksum=") != NULL);
 
     TEST_ASSERT_EQ_INT(0, a53_mqtt_outbox_append(mqtt_path, "mine-truck/demo1", &batch));
     TEST_ASSERT_EQ_INT(0, read_file(mqtt_path, text, sizeof(text)));

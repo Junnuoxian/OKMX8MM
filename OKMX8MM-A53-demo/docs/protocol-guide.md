@@ -48,6 +48,7 @@ file=a53-storage.jsonl
 sequence=0
 byte_offset=268
 line_bytes=268
+line_checksum=1234ABCD
 ```
 
 字段说明：
@@ -58,6 +59,7 @@ line_bytes=268
 | `sequence` | 最新写入批次 |
 | `byte_offset` | 最新写入后的文件偏移 |
 | `line_bytes` | 最新一行字节数 |
+| `line_checksum` | 最新一行的 FNV-1a 校验 |
 
 ## MQTT Outbox
 

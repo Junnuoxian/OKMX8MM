@@ -20,10 +20,24 @@ static int build_cursor_path(const char *path, char *cursor_path, size_t capacit
     return 0;
 }
 
+static uint32_t checksum_fnv1a(const char *text, size_t length)
+{
+    uint32_t hash = 2166136261u;
+    size_t index;
+
+    for (index = 0; index < length; index++) {
+        hash ^= (unsigned char)text[index];
+        hash *= 16777619u;
+    }
+
+    return hash;
+}
+
 static int write_storage_cursor(const char *path,
                                 uint32_t sequence,
                                 long byte_offset,
-                                long line_bytes)
+                                long line_bytes,
+                                uint32_t line_checksum)
 {
     char cursor_path[512];
     FILE *file;
@@ -45,11 +59,12 @@ static int write_storage_cursor(const char *path,
     }
 
     fprintf(file,
-        "file=%s\nsequence=%u\nbyte_offset=%ld\nline_bytes=%ld\n",
+        "file=%s\nsequence=%u\nbyte_offset=%ld\nline_bytes=%ld\nline_checksum=%08X\n",
         file_name,
         sequence,
         byte_offset,
-        line_bytes);
+        line_bytes,
+        (unsigned int)line_checksum);
 
     return fclose(file);
 }
@@ -60,6 +75,9 @@ int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch)
     int channel;
     long start_offset;
     long end_offset;
+    char line[1024];
+    int used;
+    size_t line_length;
 
     if (path == NULL || batch == NULL) {
         return -1;
@@ -80,7 +98,7 @@ int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch)
         return -1;
     }
 
-    fprintf(file,
+    used = snprintf(line, sizeof(line),
         "{\"sequence\":%u,\"source\":\"m4-replay\",\"sample_rate_hz\":%u,"
         "\"samples\":%u,\"di_bits\":%u,\"speed_pulse_delta\":%u,"
         "\"speed_period_us\":%u,\"first_sample\":{",
@@ -90,15 +108,44 @@ int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch)
         batch->digital_states[0],
         batch->speed_pulse_delta,
         batch->speed_period_us);
+    if (used < 0 || (size_t)used >= sizeof(line)) {
+        fclose(file);
+        return -1;
+    }
+    line_length = (size_t)used;
 
     for (channel = 0; channel < batch->analog_channel_count; channel++) {
-        fprintf(file, "\"ai%d\":%d", channel, batch->analog_samples[0][channel]);
+        used = snprintf(line + line_length,
+            sizeof(line) - line_length,
+            "\"ai%d\":%d",
+            channel,
+            batch->analog_samples[0][channel]);
+        if (used < 0 || (size_t)used >= sizeof(line) - line_length) {
+            fclose(file);
+            return -1;
+        }
+        line_length += (size_t)used;
         if (channel + 1 < batch->analog_channel_count) {
-            fputc(',', file);
+            if (line_length + 1 >= sizeof(line)) {
+                fclose(file);
+                return -1;
+            }
+            line[line_length++] = ',';
+            line[line_length] = '\0';
         }
     }
 
-    fputs("}}\n", file);
+    used = snprintf(line + line_length, sizeof(line) - line_length, "}}\n");
+    if (used < 0 || (size_t)used >= sizeof(line) - line_length) {
+        fclose(file);
+        return -1;
+    }
+    line_length += (size_t)used;
+
+    if (fwrite(line, 1, line_length, file) != line_length) {
+        fclose(file);
+        return -1;
+    }
     end_offset = ftell(file);
     if (end_offset < 0) {
         fclose(file);
@@ -111,5 +158,6 @@ int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch)
     return write_storage_cursor(path,
         batch->sequence,
         end_offset,
-        end_offset - start_offset);
+        end_offset - start_offset,
+        checksum_fnv1a(line, line_length));
 }
