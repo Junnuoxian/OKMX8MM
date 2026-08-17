@@ -41,6 +41,8 @@ sequence,ai0,ai1,ai2,ai3,ai4,ai5,ai6,ai7,ai8,ai9,di_bits,speed_pulse_delta,speed
 | `speed_pulse_delta` | 转速脉冲增量 |
 | `speed_period_us` | 转速周期，单位微秒 |
 
+要求：同一次运行内，后续批次的 `sequence` 必须等于上一批加 1；发现跳号或乱序时，程序会停止本轮处理。
+
 ## 存储 JSONL
 
 默认文件：
