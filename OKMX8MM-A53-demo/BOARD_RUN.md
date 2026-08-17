@@ -8,25 +8,31 @@
 
 1. 复制 `OKMX8MM-A53-demo` 到开发板。
 2. 进入 `OKMX8MM-A53-demo`。
-3. 编译：
+3. 先检查环境：
+
+```sh
+sh scripts/check-board-env.sh
+```
+
+4. 编译：
 
 ```sh
 sh scripts/build-linux.sh
 ```
 
-4. 运行内置模拟数据：
+5. 运行内置模拟数据：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --cycles 3
 ```
 
-5. 运行文本输入数据：
+6. 运行文本输入数据：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --file examples/m4-input.csv --cycles 3
 ```
 
-6. 如果要写到 SD 卡挂载目录，运行时指定输出文件：
+7. 如果要写到 SD 卡挂载目录，运行时指定输出文件：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --cycles 3 \
@@ -35,7 +41,7 @@ sh scripts/build-linux.sh
   --can-trace /mnt/sdcard/can-trace.log
 ```
 
-7. 查看输出：
+8. 查看输出：
 
 ```sh
 cat runtime-data/a53-storage.jsonl

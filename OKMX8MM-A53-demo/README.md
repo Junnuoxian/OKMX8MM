@@ -129,6 +129,12 @@ src\m4_file_source.c
 BOARD_RUN.md
 ```
 
+开发板上先执行：
+
+```sh
+sh scripts/check-board-env.sh
+```
+
 ## 下一步
 
 1. 在 OKMX8MM 开发板上确认 A53 Linux 的编译环境。
