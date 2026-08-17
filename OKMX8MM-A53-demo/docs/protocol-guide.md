@@ -98,7 +98,7 @@ runtime-data/a53-can-trace.log
 一行示例：
 
 ```text
-CAN id=0x321 seq=0 ai0=1000 di=0x01 speed_pulse=11 speed_period_us=50000
+CAN id=0x321 seq=0 ai0=1000 di=0x01 speed_pulse=11 speed_period_us=50000 frame=321#0000E803010B0000
 ```
 
 当前 CAN dry-run 会转换成：
@@ -116,6 +116,8 @@ payload 说明：
 | 4 | di_bits |
 | 5-6 | speed_pulse_delta，小端 |
 | 7 | 保留 |
+
+说明：`frame=` 字段由 C 程序直接生成，`send-can-trace.sh` 会优先使用它；旧格式没有 `frame=` 时，脚本仍会按字段临时转换。
 
 ## 后续要统一的地方
 

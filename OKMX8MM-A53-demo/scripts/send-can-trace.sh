@@ -84,6 +84,12 @@ word_le_hex() {
 
 line_to_frame() {
     line=$1
+    direct_frame=$(printf '%s\n' "$line" | sed -n 's/.*frame=\([0-9A-Fa-f][0-9A-Fa-f]*#[0-9A-Fa-f][0-9A-Fa-f]*\).*/\1/p')
+    if [ -n "$direct_frame" ]; then
+        printf '%s\n' "$direct_frame"
+        return 0
+    fi
+
     can_id=$(printf '%s\n' "$line" | sed -n 's/.*id=0x\([0-9A-Fa-f][0-9A-Fa-f]*\).*/\1/p')
     seq=$(printf '%s\n' "$line" | sed -n 's/.*seq=\([0-9][0-9]*\).*/\1/p')
     ai0=$(printf '%s\n' "$line" | sed -n 's/.*ai0=\(-*[0-9][0-9]*\).*/\1/p')

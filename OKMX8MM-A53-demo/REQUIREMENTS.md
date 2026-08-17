@@ -73,6 +73,7 @@ A53 需要支持三种阶段：
 - 可通过 `--can-id 0x321` 指定 CAN ID。
 - 可复制 `config/can.env.example` 为 `config/can.env` 后填写 CAN 网口名。
 - 当前用 `scripts/send-can-trace.sh` 把 CAN 记录转换为 `cansend` 命令。
+- CAN 记录中必须包含 `frame=321#...`，方便直接发送。
 - 后续稳定后，可把写日志替换成直接调用 SocketCAN。
 
 ## 开发板验收

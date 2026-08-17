@@ -18,6 +18,7 @@
 - [ ] 执行 `.\build\okmx8mm-a53-demo.exe --check-storage runtime-data\a53-storage.jsonl`。
 - [ ] 存储游标校验能通过。
 - [ ] CAN 记录能看到 `CAN id=0x321`。
+- [ ] CAN 记录能看到 `frame=321#`。
 
 ## 开发板基础验收
 

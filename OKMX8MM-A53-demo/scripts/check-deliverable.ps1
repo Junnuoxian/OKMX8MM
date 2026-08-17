@@ -86,6 +86,7 @@ Require-Literal $contents['docs/reference-migration-map.md'] 'modules/mqtt' 'doc
 Require-Literal $contents['docs/reference-migration-map.md'] 'modules/can' 'docs/reference-migration-map.md'
 Require-Literal $contents['docs/protocol-guide.md'] 'sequence,ai0,ai1,ai2,ai3,ai4,ai5,ai6,ai7,ai8,ai9,di_bits,speed_pulse_delta,speed_period_us' 'docs/protocol-guide.md'
 Require-Literal $contents['docs/protocol-guide.md'] '存储游标' 'docs/protocol-guide.md'
+Require-Literal $contents['docs/protocol-guide.md'] 'frame=321#0000E803010B0000' 'docs/protocol-guide.md'
 Require-Literal $contents['docs/acceptance-checklist.md'] 'Windows 模拟验收' 'docs/acceptance-checklist.md'
 Require-Literal $contents['docs/acceptance-checklist.md'] '开发板基础验收' 'docs/acceptance-checklist.md'
 

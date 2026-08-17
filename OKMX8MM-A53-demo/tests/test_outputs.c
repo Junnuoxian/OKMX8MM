@@ -101,6 +101,7 @@ static int writers_create_beginner_readable_output_files(void)
     TEST_ASSERT_EQ_INT(0, read_file(can_path, text, sizeof(text)));
     TEST_ASSERT_TRUE(strstr(text, "CAN id=0x321 seq=0") != NULL);
     TEST_ASSERT_TRUE(strstr(text, "ai0=1000") != NULL);
+    TEST_ASSERT_TRUE(strstr(text, "frame=321#0000E803010B0000") != NULL);
 
     remove(storage_path);
     remove(storage_cursor_path);

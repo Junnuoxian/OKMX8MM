@@ -27,7 +27,7 @@ D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-A53-demo
 | --- | --- | --- | --- |
 | 存储 | `modules/storage` | `src/storage_writer.c` | 已有最小游标；后续移植 CRC、尾部恢复、空间检查 |
 | MQTT | `modules/mqtt` | `src/mqtt_outbox.c`、`scripts/publish-mqtt-outbox.sh` | 后续移植 payload 编码、重发队列 |
-| CAN | `modules/can` | `src/can_trace.c`、`scripts/send-can-trace.sh` | 后续移植 CAN 字节编码和 SocketCAN |
+| CAN | `modules/can` | `src/can_trace.c`、`scripts/send-can-trace.sh` | 已在 C 侧生成 frame；后续移植 SocketCAN |
 | 文件工具 | `modules/util/fs_io.c`、`modules/util/fs_utils.c` | `src/file_utils.c` | 后续增强目录创建、剩余空间检查 |
 | JSON | `modules/util/sample_json.c` | `src/storage_writer.c`、`src/mqtt_outbox.c` | 后续统一 JSON 生成 |
 | 配置 | `src/app_config.c`、`config/demo.ini` | `src/cli.c`、`config/*.env.example` | 后续增加配置文件读取 |
