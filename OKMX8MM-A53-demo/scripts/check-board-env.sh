@@ -46,6 +46,9 @@ else
     warn '/mnt/sdcard is not ready'
 fi
 
-warn 'MQTT is still file outbox mode in this demo'
+command -v jq >/dev/null 2>&1 && pass 'jq found' || warn 'jq not found'
+command -v mosquitto_pub >/dev/null 2>&1 && pass 'mosquitto_pub found' || warn 'mosquitto_pub not found'
+
+warn 'MQTT publish requires MQTT_HOST and publish-mqtt-outbox.sh'
 warn 'CAN is still trace file mode in this demo'
 printf 'check finished\n'

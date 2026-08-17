@@ -27,6 +27,7 @@ New-Item -ItemType Directory -Force $stagingRoot, $outputRoot | Out-Null
 $items = @(
     'CMakeLists.txt',
     'README.md',
+    'REQUIREMENTS.md',
     'BOARD_RUN.md',
     '.gitignore',
     'include',

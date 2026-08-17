@@ -49,6 +49,32 @@ cat runtime-data/a53-mqtt-outbox.jsonl
 cat runtime-data/a53-can-trace.log
 ```
 
+## 上传 MQTT
+
+先只看待发送内容，不发到云：
+
+```sh
+MQTT_HOST=test sh scripts/publish-mqtt-outbox.sh --dry-run
+```
+
+确认格式后，设置真实 MQTT 参数再发布：
+
+```sh
+export MQTT_HOST=your-mqtt-host
+export MQTT_PORT=1883
+export MQTT_USER=your-user
+export MQTT_PASSWORD=your-password
+sh scripts/publish-mqtt-outbox.sh
+```
+
+发布成功后，如果确认可以清空待发送文件：
+
+```sh
+sh scripts/publish-mqtt-outbox.sh --clear-on-success
+```
+
+注意：不要把账号和密码写进源码、说明或 Git。
+
 ## 判断是否正常
 
 - 程序提示写入 3 批数据。
@@ -69,6 +95,5 @@ src/m4_file_source.c
 ## 当前还没做
 
 - 还没接真实 SD 卡。
-- 还没接真实 MQTT 云平台。
 - 还没接真实 CAN 总线。
 - 还没和真实 M4 通信联调。

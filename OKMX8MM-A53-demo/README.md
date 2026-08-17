@@ -14,6 +14,12 @@
 - CAN 使用文本日志模拟 CAN 帧。
 - 没有连接真实开发板、真实 SD 卡、云平台或 CAN 收发器。
 
+完整需求看：
+
+```text
+REQUIREMENTS.md
+```
+
 ## 新手操作
 
 ### 1. 编译
@@ -134,6 +140,8 @@ BOARD_RUN.md
 ```sh
 sh scripts/check-board-env.sh
 ```
+
+MQTT 上传看 `BOARD_RUN.md` 的“上传 MQTT”部分。
 
 ## 生成开发板压缩包
 
