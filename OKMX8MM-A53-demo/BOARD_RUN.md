@@ -55,6 +55,13 @@ cat runtime-data/a53-can-trace.log
 ./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl
 ```
 
+如果校验失败，并且只是最后一行没写完整：
+
+```sh
+./build-linux/okmx8mm-a53-demo --recover-storage runtime-data/a53-storage.jsonl
+./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl
+```
+
 ## 上传 MQTT
 
 先只看待发送内容，不发到云：
@@ -108,6 +115,7 @@ sh scripts/send-can-trace.sh --clear-on-success
 - 程序提示写入 3 批数据。
 - 三个输出文件都有内容。
 - `a53-storage.jsonl` 能看到 `ai0` 到 `ai9`。
+- `--recover-storage` 可截掉最后一行不完整内容。
 - `a53-can-trace.log` 能看到 `CAN id=0x321`。
 - CAN dry-run 能看到 `cansend can0`。
 

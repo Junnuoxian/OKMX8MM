@@ -25,7 +25,7 @@ D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-A53-demo
 
 | 功能 | 参考工程模块 | 当前 A53 文件 | 后续动作 |
 | --- | --- | --- | --- |
-| 存储 | `modules/storage` | `src/storage_writer.c` | 已有最小游标；后续移植 CRC、尾部恢复、空间检查 |
+| 存储 | `modules/storage` | `src/storage_writer.c` | 已有最小游标和尾部恢复；后续移植空间检查 |
 | MQTT | `modules/mqtt` | `src/mqtt_outbox.c`、`scripts/publish-mqtt-outbox.sh` | 后续移植 payload 编码、重发队列 |
 | CAN | `modules/can` | `src/can_trace.c`、`scripts/send-can-trace.sh` | 已在 C 侧生成 frame；后续移植 SocketCAN |
 | 文件工具 | `modules/util/fs_io.c`、`modules/util/fs_utils.c` | `src/file_utils.c` | 后续增强目录创建、剩余空间检查 |
@@ -36,7 +36,7 @@ D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-A53-demo
 
 ## 推荐移植顺序
 
-1. 存储增强：优先移植参考工程的 storage cursor 和恢复思路。
+1. 存储增强：后续移植参考工程的空间检查和更完整游标格式。
 2. CAN 编码：移植参考工程的 `can_codec`，让 CAN payload 不只靠脚本拼接。
 3. MQTT 编码：移植参考工程的 `mqtt_codec`，统一 topic 和 payload 格式。
 4. 配置文件：移植 `app_config` 的配置校验，不再只靠命令行参数。

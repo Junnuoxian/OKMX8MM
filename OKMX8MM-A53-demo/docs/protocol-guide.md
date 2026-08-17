@@ -67,6 +67,14 @@ line_checksum=1234ABCD
 ./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl
 ```
 
+恢复命令：
+
+```sh
+./build-linux/okmx8mm-a53-demo --recover-storage runtime-data/a53-storage.jsonl
+```
+
+说明：恢复只处理文件尾部的不完整内容，不会修复中间损坏的数据。
+
 ## MQTT Outbox
 
 默认文件：
@@ -123,6 +131,6 @@ payload 说明：
 
 ## 后续要统一的地方
 
-- 存储 JSON 后续参考 `modules/storage` 增加恢复和空间检查。
+- 存储 JSON 后续参考 `modules/storage` 增加空间检查。
 - MQTT 后续参考 `modules/mqtt` 统一编码。
 - CAN 后续参考 `modules/can` 统一字节打包。

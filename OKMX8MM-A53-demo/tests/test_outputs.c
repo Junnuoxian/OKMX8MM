@@ -26,6 +26,16 @@ static int write_text(const char *path, const char *text)
     return fclose(file);
 }
 
+static int append_text(const char *path, const char *text)
+{
+    FILE *file = fopen(path, "ab");
+    if (file == NULL) {
+        return -1;
+    }
+    fputs(text, file);
+    return fclose(file);
+}
+
 static long file_size(const char *path)
 {
     FILE *file = fopen(path, "rb");
@@ -87,6 +97,12 @@ static int writers_create_beginner_readable_output_files(void)
     TEST_ASSERT_TRUE(sscanf(strstr(text, "line_bytes="), "line_bytes=%ld", &line_bytes) == 1);
     TEST_ASSERT_EQ_INT(second_size - first_size, line_bytes);
     TEST_ASSERT_TRUE(strstr(text, "line_checksum=") != NULL);
+    TEST_ASSERT_EQ_INT(0, a53_storage_validate_cursor(storage_path));
+    TEST_ASSERT_EQ_INT(0, append_text(storage_path, "{\"sequence\":2"));
+    TEST_ASSERT_TRUE(file_size(storage_path) > second_size);
+    TEST_ASSERT_EQ_INT(-1, a53_storage_validate_cursor(storage_path));
+    TEST_ASSERT_EQ_INT(0, a53_storage_recover_tail(storage_path));
+    TEST_ASSERT_EQ_INT(second_size, file_size(storage_path));
     TEST_ASSERT_EQ_INT(0, a53_storage_validate_cursor(storage_path));
     TEST_ASSERT_EQ_INT(0, write_text(storage_cursor_path,
         "file=test-storage.jsonl\nsequence=1\nbyte_offset=1\nline_bytes=1\nline_checksum=00000000\n"));

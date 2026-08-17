@@ -5,6 +5,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(_WIN32)
+#include <io.h>
+#include <windows.h>
+#else
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
+typedef struct {
+    char file_name[256];
+    uint32_t sequence;
+    long byte_offset;
+    long line_bytes;
+    uint32_t line_checksum;
+} storage_cursor_info_t;
+
 static int build_cursor_path(const char *path, char *cursor_path, size_t capacity)
 {
     int result;
@@ -82,23 +98,18 @@ static const char *base_name(const char *path)
     return file_name == NULL ? path : file_name + 1;
 }
 
-int a53_storage_validate_cursor(const char *path)
+static int read_storage_cursor(const char *path, storage_cursor_info_t *cursor)
 {
     char cursor_path[512];
     char cursor_text[512];
-    char file_name[256];
-    char expected_sequence[64];
-    char line[1024];
     FILE *cursor_file;
-    FILE *storage_file;
     size_t cursor_size;
-    size_t read_size;
     unsigned int sequence;
     long byte_offset;
     long line_bytes;
     unsigned int line_checksum;
 
-    if (path == NULL || build_cursor_path(path, cursor_path, sizeof(cursor_path)) != 0) {
+    if (path == NULL || cursor == NULL || build_cursor_path(path, cursor_path, sizeof(cursor_path)) != 0) {
         return -1;
     }
 
@@ -114,40 +125,96 @@ int a53_storage_validate_cursor(const char *path)
 
     if (sscanf(cursor_text,
             "file=%255[^\n]\nsequence=%u\nbyte_offset=%ld\nline_bytes=%ld\nline_checksum=%8X\n",
-            file_name,
+            cursor->file_name,
             &sequence,
             &byte_offset,
             &line_bytes,
             &line_checksum) != 5) {
         return -1;
     }
-    if (strcmp(file_name, base_name(path)) != 0 ||
+    if (strcmp(cursor->file_name, base_name(path)) != 0 ||
         byte_offset <= 0 ||
         line_bytes <= 0 ||
-        line_bytes >= (long)sizeof(line) ||
+        line_bytes >= 1024 ||
         byte_offset < line_bytes) {
         return -1;
     }
+    cursor->sequence = (uint32_t)sequence;
+    cursor->byte_offset = byte_offset;
+    cursor->line_bytes = line_bytes;
+    cursor->line_checksum = (uint32_t)line_checksum;
 
+    return 0;
+}
+
+static int file_size(FILE *file, long *size)
+{
+    if (file == NULL || size == NULL || fseek(file, 0, SEEK_END) != 0) {
+        return -1;
+    }
+    *size = ftell(file);
+    return *size < 0 ? -1 : 0;
+}
+
+static int truncate_open_file(FILE *file, long offset)
+{
+    if (file == NULL || offset < 0 || fflush(file) != 0) {
+        return -1;
+    }
+
+#if defined(_WIN32)
+    {
+        HANDLE handle;
+        LARGE_INTEGER position;
+
+        handle = (HANDLE)_get_osfhandle(_fileno(file));
+        if (handle == INVALID_HANDLE_VALUE) {
+            return -1;
+        }
+        position.QuadPart = offset;
+        if (SetFilePointerEx(handle, position, NULL, FILE_BEGIN) == 0 ||
+            SetEndOfFile(handle) == 0) {
+            return -1;
+        }
+    }
+#else
+    if (ftruncate(fileno(file), (off_t)offset) != 0) {
+        return -1;
+    }
+#endif
+    clearerr(file);
+    return fseek(file, offset, SEEK_SET);
+}
+
+static int verify_cursor_line(const char *path, const storage_cursor_info_t *cursor)
+{
+    char expected_sequence[64];
+    char line[1024];
+    FILE *storage_file;
+    size_t read_size;
+
+    if (path == NULL || cursor == NULL) {
+        return -1;
+    }
     storage_file = fopen(path, "rb");
     if (storage_file == NULL) {
         return -1;
     }
-    if (fseek(storage_file, byte_offset - line_bytes, SEEK_SET) != 0) {
+    if (fseek(storage_file, cursor->byte_offset - cursor->line_bytes, SEEK_SET) != 0) {
         fclose(storage_file);
         return -1;
     }
-    read_size = fread(line, 1, (size_t)line_bytes, storage_file);
-    if (ferror(storage_file) || fclose(storage_file) != 0 || read_size != (size_t)line_bytes) {
+    read_size = fread(line, 1, (size_t)cursor->line_bytes, storage_file);
+    if (ferror(storage_file) || fclose(storage_file) != 0 || read_size != (size_t)cursor->line_bytes) {
         return -1;
     }
     line[read_size] = '\0';
 
-    if (checksum_fnv1a(line, read_size) != (uint32_t)line_checksum) {
+    if (checksum_fnv1a(line, read_size) != cursor->line_checksum) {
         return -1;
     }
 
-    if (snprintf(expected_sequence, sizeof(expected_sequence), "\"sequence\":%u", sequence) < 0) {
+    if (snprintf(expected_sequence, sizeof(expected_sequence), "\"sequence\":%u", cursor->sequence) < 0) {
         return -1;
     }
     if (strstr(line, expected_sequence) == NULL) {
@@ -155,6 +222,57 @@ int a53_storage_validate_cursor(const char *path)
     }
 
     return 0;
+}
+
+int a53_storage_validate_cursor(const char *path)
+{
+    storage_cursor_info_t cursor;
+    FILE *storage_file;
+    long storage_size;
+
+    if (read_storage_cursor(path, &cursor) != 0) {
+        return -1;
+    }
+
+    storage_file = fopen(path, "rb");
+    if (storage_file == NULL) {
+        return -1;
+    }
+    if (file_size(storage_file, &storage_size) != 0 || fclose(storage_file) != 0) {
+        return -1;
+    }
+    if (storage_size != cursor.byte_offset) {
+        return -1;
+    }
+
+    return verify_cursor_line(path, &cursor);
+}
+
+int a53_storage_recover_tail(const char *path)
+{
+    storage_cursor_info_t cursor;
+    FILE *storage_file;
+    long storage_size;
+    int result;
+
+    if (read_storage_cursor(path, &cursor) != 0 || verify_cursor_line(path, &cursor) != 0) {
+        return -1;
+    }
+
+    storage_file = fopen(path, "r+b");
+    if (storage_file == NULL) {
+        return -1;
+    }
+    if (file_size(storage_file, &storage_size) != 0 || storage_size < cursor.byte_offset) {
+        fclose(storage_file);
+        return -1;
+    }
+    result = truncate_open_file(storage_file, cursor.byte_offset);
+    if (fclose(storage_file) != 0) {
+        return -1;
+    }
+
+    return result;
 }
 
 int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch)

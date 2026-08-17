@@ -17,6 +17,8 @@
 - [ ] 存储游标能看到 `line_checksum`。
 - [ ] 执行 `.\build\okmx8mm-a53-demo.exe --check-storage runtime-data\a53-storage.jsonl`。
 - [ ] 存储游标校验能通过。
+- [ ] 人为追加一段不完整内容后，执行 `.\build\okmx8mm-a53-demo.exe --recover-storage runtime-data\a53-storage.jsonl`。
+- [ ] 再次执行 `--check-storage` 能通过。
 - [ ] CAN 记录能看到 `CAN id=0x321`。
 - [ ] CAN 记录能看到 `frame=321#`。
 
@@ -30,6 +32,7 @@
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --cycles 3`。
 - [ ] 三个输出文件都有内容。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl` 能通过。
+- [ ] 文件尾部不完整时，执行 `./build-linux/okmx8mm-a53-demo --recover-storage runtime-data/a53-storage.jsonl` 能恢复。
 
 ## 文本输入验收
 
@@ -43,7 +46,7 @@
 - [ ] 复制 `config/mqtt.env.example` 为 `config/mqtt.env`。
 - [ ] 填写开发板现场使用的 MQTT 参数。
 - [ ] 执行 `sh scripts/publish-mqtt-outbox.sh --env config/mqtt.env --dry-run`。
-- [ ] 能看到 topic 和 payload。
+- [ ] 能看到 qos、topic 和 payload。
 - [ ] 真实发布前确认账号不进 Git。
 - [ ] 真实发布后云平台能收到数据。
 

@@ -81,6 +81,13 @@ runtime-data\a53-can-trace.log
 .\build\okmx8mm-a53-demo.exe --check-storage runtime-data\a53-storage.jsonl
 ```
 
+如果校验失败，并且只是最后一行写了一半，先恢复尾部：
+
+```powershell
+.\build\okmx8mm-a53-demo.exe --recover-storage runtime-data\a53-storage.jsonl
+.\build\okmx8mm-a53-demo.exe --check-storage runtime-data\a53-storage.jsonl
+```
+
 常用参数：
 
 - `--cycles N`：处理 N 批数据。
@@ -91,6 +98,7 @@ runtime-data\a53-can-trace.log
 - `--topic name`：设置 MQTT topic。
 - `--can-id 0x321`：设置 CAN ID。
 - `--check-storage file`：检查存储文件和 `.cursor` 是否匹配。
+- `--recover-storage file`：截掉存储文件最后的不完整内容。
 
 ## 输出说明
 
@@ -111,7 +119,7 @@ runtime-data\a53-can-trace.log
 a53-storage.jsonl.cursor
 ```
 
-它记录最新写入的批次序号、字节偏移、行长度和行校验，用于后续断电恢复扩展。
+它记录最新写入的批次序号、字节偏移、行长度和行校验。文件尾部写坏时，可用 `--recover-storage` 截回上一条完整记录。
 
 ### MQTT 文件
 
@@ -194,6 +202,7 @@ CAN 发送看 `BOARD_RUN.md` 的“发送 CAN”部分。
 1. 在 OKMX8MM 开发板上确认 A53 Linux 的编译环境。
 2. 用真实 RPMsg 或串口替换模拟 M4 数据。
 3. 把存储文件替换为 SD 卡文件。
-4. 把 MQTT 待发送文件替换为真实 MQTT 发布。
-5. 把 CAN 日志替换为真实 CAN 发送。
-6. 接入真实硬件后重新测试，确认后再用于矿车。
+4. 在 SD 卡上做长时间写入和恢复验证。
+5. 配置真实 MQTT 并上传到云平台。
+6. 把 CAN 日志替换为真实 CAN 发送。
+7. 接入真实硬件后重新测试，确认后再用于矿车。

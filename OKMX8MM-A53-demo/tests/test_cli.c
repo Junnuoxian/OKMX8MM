@@ -11,6 +11,7 @@ static int cli_defaults_to_replay_source(void)
     TEST_ASSERT_EQ_INT(5, options.cycles);
     TEST_ASSERT_TRUE(options.source_path == 0);
     TEST_ASSERT_TRUE(options.check_storage_path == 0);
+    TEST_ASSERT_TRUE(options.recover_storage_path == 0);
     TEST_ASSERT_EQ_STR("runtime-data/a53-storage.jsonl", options.storage_path);
     TEST_ASSERT_EQ_STR("runtime-data/a53-mqtt-outbox.jsonl", options.mqtt_outbox_path);
     TEST_ASSERT_EQ_STR("runtime-data/a53-can-trace.log", options.can_trace_path);
@@ -30,6 +31,20 @@ static int cli_accepts_storage_cursor_check_mode(void)
 
     TEST_ASSERT_EQ_INT(0, a53_cli_parse(3, argv, &options));
     TEST_ASSERT_EQ_STR("runtime-data/a53-storage.jsonl", options.check_storage_path);
+    return 0;
+}
+
+static int cli_accepts_storage_tail_recover_mode(void)
+{
+    const char *argv[] = {
+        "okmx8mm-a53-demo",
+        "--recover-storage",
+        "runtime-data/a53-storage.jsonl"
+    };
+    a53_cli_options_t options;
+
+    TEST_ASSERT_EQ_INT(0, a53_cli_parse(3, argv, &options));
+    TEST_ASSERT_EQ_STR("runtime-data/a53-storage.jsonl", options.recover_storage_path);
     return 0;
 }
 
@@ -90,6 +105,7 @@ int main(void)
 {
     TEST_RUN(cli_defaults_to_replay_source);
     TEST_RUN(cli_accepts_storage_cursor_check_mode);
+    TEST_RUN(cli_accepts_storage_tail_recover_mode);
     TEST_RUN(cli_accepts_file_source_and_cycle_count);
     TEST_RUN(cli_accepts_output_settings);
     TEST_RUN(cli_rejects_file_without_path);

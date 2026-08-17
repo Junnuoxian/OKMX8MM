@@ -39,6 +39,7 @@ typedef struct {
     a53_source_kind_t source_kind;
     const char *source_path;
     const char *check_storage_path;
+    const char *recover_storage_path;
     uint32_t cycles;
     const char *storage_path;
     const char *mqtt_outbox_path;
@@ -66,6 +67,7 @@ void a53_m4_source_close(a53_m4_source_t *source);
 int a53_cli_parse(int argc, const char **argv, a53_cli_options_t *options);
 int a53_storage_append_batch(const char *path, const a53_m4_batch_t *batch);
 int a53_storage_validate_cursor(const char *path);
+int a53_storage_recover_tail(const char *path);
 int a53_mqtt_outbox_append(const char *path, const char *topic, const a53_m4_batch_t *batch);
 int a53_can_trace_append(const char *path, uint32_t can_id, const a53_m4_batch_t *batch);
 int a53_pipeline_run(const a53_pipeline_config_t *config);
