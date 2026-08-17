@@ -26,7 +26,16 @@ sh scripts/build-linux.sh
 ./build-linux/okmx8mm-a53-demo --file examples/m4-input.csv --cycles 3
 ```
 
-6. 查看输出：
+6. 如果要写到 SD 卡挂载目录，运行时指定输出文件：
+
+```sh
+./build-linux/okmx8mm-a53-demo --cycles 3 \
+  --storage /mnt/sdcard/samples.jsonl \
+  --mqtt-outbox /mnt/sdcard/mqtt-outbox.jsonl \
+  --can-trace /mnt/sdcard/can-trace.log
+```
+
+7. 查看输出：
 
 ```sh
 cat runtime-data/a53-storage.jsonl

@@ -38,6 +38,17 @@
 .\build\okmx8mm-a53-demo.exe --file .\examples\m4-input.csv --cycles 3
 ```
 
+也可以指定输出文件：
+
+```powershell
+.\build\okmx8mm-a53-demo.exe --cycles 3 `
+  --storage runtime-data\sd-samples.jsonl `
+  --mqtt-outbox runtime-data\mqtt.jsonl `
+  --can-trace runtime-data\can.log `
+  --topic truck/001 `
+  --can-id 0x456
+```
+
 ### 3. 查看结果
 
 运行后查看：
@@ -49,6 +60,16 @@ runtime-data\a53-can-trace.log
 ```
 
 每处理一批 M4 数据，三个文件各增加一行。
+
+常用参数：
+
+- `--cycles N`：处理 N 批数据。
+- `--file input.csv`：读取文本输入，不用内置模拟。
+- `--storage file`：采集数据写入文件。
+- `--mqtt-outbox file`：MQTT 待发内容写入文件。
+- `--can-trace file`：CAN 内容写入文件。
+- `--topic name`：设置 MQTT topic。
+- `--can-id 0x321`：设置 CAN ID。
 
 ## 输出说明
 

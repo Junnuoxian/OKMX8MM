@@ -10,6 +10,11 @@ static int cli_defaults_to_replay_source(void)
     TEST_ASSERT_EQ_INT(A53_SOURCE_REPLAY, options.source_kind);
     TEST_ASSERT_EQ_INT(5, options.cycles);
     TEST_ASSERT_TRUE(options.source_path == 0);
+    TEST_ASSERT_EQ_STR("runtime-data/a53-storage.jsonl", options.storage_path);
+    TEST_ASSERT_EQ_STR("runtime-data/a53-mqtt-outbox.jsonl", options.mqtt_outbox_path);
+    TEST_ASSERT_EQ_STR("runtime-data/a53-can-trace.log", options.can_trace_path);
+    TEST_ASSERT_EQ_STR("mine-truck/demo1", options.mqtt_topic);
+    TEST_ASSERT_EQ_INT(0x321, options.can_id);
     return 0;
 }
 
@@ -31,6 +36,32 @@ static int cli_accepts_file_source_and_cycle_count(void)
     return 0;
 }
 
+static int cli_accepts_output_settings(void)
+{
+    const char *argv[] = {
+        "okmx8mm-a53-demo",
+        "--storage",
+        "/mnt/sdcard/samples.jsonl",
+        "--mqtt-outbox",
+        "/var/lib/mine/mqtt.jsonl",
+        "--can-trace",
+        "/var/log/mine/can.log",
+        "--topic",
+        "truck/001",
+        "--can-id",
+        "0x456"
+    };
+    a53_cli_options_t options;
+
+    TEST_ASSERT_EQ_INT(0, a53_cli_parse(11, argv, &options));
+    TEST_ASSERT_EQ_STR("/mnt/sdcard/samples.jsonl", options.storage_path);
+    TEST_ASSERT_EQ_STR("/var/lib/mine/mqtt.jsonl", options.mqtt_outbox_path);
+    TEST_ASSERT_EQ_STR("/var/log/mine/can.log", options.can_trace_path);
+    TEST_ASSERT_EQ_STR("truck/001", options.mqtt_topic);
+    TEST_ASSERT_EQ_INT(0x456, options.can_id);
+    return 0;
+}
+
 static int cli_rejects_file_without_path(void)
 {
     const char *argv[] = {"okmx8mm-a53-demo", "--file"};
@@ -44,6 +75,7 @@ int main(void)
 {
     TEST_RUN(cli_defaults_to_replay_source);
     TEST_RUN(cli_accepts_file_source_and_cycle_count);
+    TEST_RUN(cli_accepts_output_settings);
     TEST_RUN(cli_rejects_file_without_path);
     return 0;
 }

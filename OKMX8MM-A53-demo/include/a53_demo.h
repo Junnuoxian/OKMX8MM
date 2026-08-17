@@ -38,6 +38,11 @@ typedef struct {
     a53_source_kind_t source_kind;
     const char *source_path;
     uint32_t cycles;
+    const char *storage_path;
+    const char *mqtt_outbox_path;
+    const char *can_trace_path;
+    const char *mqtt_topic;
+    uint32_t can_id;
 } a53_cli_options_t;
 
 typedef struct {
