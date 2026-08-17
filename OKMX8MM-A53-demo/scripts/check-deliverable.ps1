@@ -61,6 +61,7 @@ $requiredFiles = @(
     'scripts/check-deliverable.ps1',
     'scripts/publish-mqtt-outbox.sh',
     'scripts/send-can-trace.sh',
+    'config/a53-demo.conf.example',
     'config/mqtt.env.example',
     'config/can.env.example',
     'docs/reference-migration-map.md',
@@ -78,16 +79,20 @@ Require-Literal $contents['README.md'] 'REQUIREMENTS.md' 'README.md'
 Require-Literal $contents['REQUIREMENTS.md'] 'M 核：只负责采集' 'REQUIREMENTS.md'
 Require-Literal $contents['REQUIREMENTS.md'] 'A53：负责接收数据、保存到 SD 卡、上传 MQTT、发送 CAN' 'REQUIREMENTS.md'
 Require-Literal $contents['BOARD_RUN.md'] 'sh scripts/check-board-env.sh' 'BOARD_RUN.md'
+Require-Literal $contents['BOARD_RUN.md'] '--config config/a53-demo.conf' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] '--check-storage runtime-data/a53-storage.jsonl' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] '--recover-storage runtime-data/a53-storage.jsonl' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] 'sh scripts/publish-mqtt-outbox.sh --env config/mqtt.env' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] 'dry-run 会打印 `qos`、`topic` 和 `payload`' 'BOARD_RUN.md'
 Require-Literal $contents['BOARD_RUN.md'] 'sh scripts/send-can-trace.sh --env config/can.env' 'BOARD_RUN.md'
 Require-Literal $contents['config/mqtt.env.example'] 'MQTT_QOS=1' 'config/mqtt.env.example'
+Require-Literal $contents['config/a53-demo.conf.example'] 'storage=/mnt/sdcard/samples.jsonl' 'config/a53-demo.conf.example'
+Require-Literal $contents['config/a53-demo.conf.example'] 'can_id=0x321' 'config/a53-demo.conf.example'
 Require-Literal $contents['docs/reference-migration-map.md'] 'modules/storage' 'docs/reference-migration-map.md'
 Require-Literal $contents['docs/reference-migration-map.md'] 'modules/mqtt' 'docs/reference-migration-map.md'
 Require-Literal $contents['docs/reference-migration-map.md'] 'modules/can' 'docs/reference-migration-map.md'
 Require-Literal $contents['docs/protocol-guide.md'] 'sequence,ai0,ai1,ai2,ai3,ai4,ai5,ai6,ai7,ai8,ai9,di_bits,speed_pulse_delta,speed_period_us' 'docs/protocol-guide.md'
+Require-Literal $contents['docs/protocol-guide.md'] '--config config/a53-demo.conf' 'docs/protocol-guide.md'
 Require-Literal $contents['docs/protocol-guide.md'] '存储游标' 'docs/protocol-guide.md'
 Require-Literal $contents['docs/protocol-guide.md'] '--recover-storage runtime-data/a53-storage.jsonl' 'docs/protocol-guide.md'
 Require-Literal $contents['docs/protocol-guide.md'] '"qos":1' 'docs/protocol-guide.md'
@@ -111,6 +116,7 @@ if (-not (Test-Path -LiteralPath $zipPath -PathType Leaf)) {
             'OKMX8MM-A53-demo/scripts/check-deliverable.ps1',
             'OKMX8MM-A53-demo/scripts/publish-mqtt-outbox.sh',
             'OKMX8MM-A53-demo/scripts/send-can-trace.sh',
+            'OKMX8MM-A53-demo/config/a53-demo.conf.example',
             'OKMX8MM-A53-demo/config/mqtt.env.example',
             'OKMX8MM-A53-demo/config/can.env.example'
         )) {
@@ -124,7 +130,8 @@ if (-not (Test-Path -LiteralPath $zipPath -PathType Leaf)) {
                 Add-CheckError "Package contains blocked folder: $entryName"
             }
             if ($entryName -eq 'OKMX8MM-A53-demo/config/mqtt.env' -or
-                $entryName -eq 'OKMX8MM-A53-demo/config/can.env') {
+                $entryName -eq 'OKMX8MM-A53-demo/config/can.env' -or
+                $entryName -eq 'OKMX8MM-A53-demo/config/a53-demo.conf') {
                 Add-CheckError "Package contains private config: $entryName"
             }
         }

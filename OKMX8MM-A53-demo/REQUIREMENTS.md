@@ -17,6 +17,7 @@
 - 支持生成 MQTT 待发送文件。
 - 支持生成 CAN 记录文件。
 - 支持自定义输出文件、MQTT topic、CAN ID。
+- 支持 `--config file` 读取开发板运行配置。
 - 支持开发板环境检查脚本。
 - 支持开发板交付压缩包。
 - 支持 MQTT 待发送文件发布脚本。
@@ -54,6 +55,7 @@ A53 需要支持三种阶段：
 - 支持 `--check-storage file` 检查存储文件和 `.cursor` 是否匹配。
 - 支持 `--recover-storage file` 截掉最后一行不完整内容。
 - 可通过 `--storage file` 指定输出文件。
+- 可通过 `config/a53-demo.conf.example` 快速配置输入和输出文件。
 - 开发板联调时可把输出文件放到 SD 卡挂载目录。
 
 ## MQTT 要求
@@ -85,6 +87,7 @@ A53 需要支持三种阶段：
 - `sh scripts/check-board-env.sh` 能执行。
 - `sh scripts/build-linux.sh` 能编译。
 - `./build-linux/okmx8mm-a53-demo --cycles 3` 能运行。
+- `./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf` 能运行。
 - 三个输出文件都有内容。
 - 存储文件能看到 `ai0` 到 `ai9`。
 - 存储 `.cursor` 文件能看到最新 `sequence`。

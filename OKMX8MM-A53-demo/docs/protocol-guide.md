@@ -7,6 +7,24 @@ A53 当前支持两种数据来源：
 - 内置模拟数据：程序自动生成。
 - 文本输入数据：每行代表一批 M4 数据。
 
+配置文件运行：
+
+```sh
+./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf
+```
+
+配置文件支持：
+
+```text
+cycles=3
+file=examples/m4-input.csv
+storage=/mnt/sdcard/samples.jsonl
+mqtt_outbox=/mnt/sdcard/mqtt-outbox.jsonl
+can_trace=/mnt/sdcard/can-trace.log
+topic=truck/001
+can_id=0x321
+```
+
 文本输入格式：
 
 ```text

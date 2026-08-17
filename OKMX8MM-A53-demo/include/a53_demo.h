@@ -8,7 +8,8 @@ enum {
     A53_ANALOG_CHANNEL_COUNT = 10,
     A53_BATCH_SAMPLE_COUNT = 10,
     A53_SAMPLE_RATE_HZ = 2000,
-    A53_MQTT_DEFAULT_QOS = 1
+    A53_MQTT_DEFAULT_QOS = 1,
+    A53_OPTION_TEXT_CAPACITY = 256
 };
 
 typedef enum {
@@ -46,6 +47,11 @@ typedef struct {
     const char *can_trace_path;
     const char *mqtt_topic;
     uint32_t can_id;
+    char source_path_value[A53_OPTION_TEXT_CAPACITY];
+    char storage_path_value[A53_OPTION_TEXT_CAPACITY];
+    char mqtt_outbox_path_value[A53_OPTION_TEXT_CAPACITY];
+    char can_trace_path_value[A53_OPTION_TEXT_CAPACITY];
+    char mqtt_topic_value[A53_OPTION_TEXT_CAPACITY];
 } a53_cli_options_t;
 
 typedef struct {

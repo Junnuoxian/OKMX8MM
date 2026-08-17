@@ -8,7 +8,7 @@ int main(int argc, char **argv)
     a53_pipeline_config_t config;
 
     if (a53_cli_parse(argc, (const char **)argv, &options) != 0) {
-        fputs("Usage: okmx8mm-a53-demo [cycles] [--cycles N] [--file input.csv]\n", stderr);
+        fputs("Usage: okmx8mm-a53-demo [cycles] [--config file] [--cycles N] [--file input.csv]\n", stderr);
         fputs("       [--check-storage storage.jsonl] [--recover-storage storage.jsonl]\n", stderr);
         fputs("       [--storage file] [--mqtt-outbox file] [--can-trace file]\n", stderr);
         fputs("       [--topic name] [--can-id 0x321]\n", stderr);

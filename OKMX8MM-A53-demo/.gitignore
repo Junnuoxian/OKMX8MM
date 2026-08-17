@@ -4,6 +4,7 @@ packages/
 _package/
 config/mqtt.env
 config/can.env
+config/a53-demo.conf
 .vs/
 .vscode/
 *.user

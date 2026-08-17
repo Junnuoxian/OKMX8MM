@@ -5,3 +5,4 @@
 **/_package/
 **/config/mqtt.env
 **/config/can.env
+**/config/a53-demo.conf

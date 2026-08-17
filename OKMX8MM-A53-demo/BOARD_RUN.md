@@ -41,7 +41,15 @@ sh scripts/build-linux.sh
   --can-trace /mnt/sdcard/can-trace.log
 ```
 
-8. 查看输出：
+8. 也可以用配置文件运行：
+
+```sh
+cp config/a53-demo.conf.example config/a53-demo.conf
+vi config/a53-demo.conf
+./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf
+```
+
+9. 查看输出：
 
 ```sh
 cat runtime-data/a53-storage.jsonl
@@ -49,7 +57,7 @@ cat runtime-data/a53-mqtt-outbox.jsonl
 cat runtime-data/a53-can-trace.log
 ```
 
-9. 校验存储游标：
+10. 校验存储游标：
 
 ```sh
 ./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl

@@ -63,6 +63,13 @@ docs/acceptance-checklist.md
   --can-id 0x456
 ```
 
+也可以用配置文件，适合开发板现场反复运行：
+
+```powershell
+Copy-Item .\config\a53-demo.conf.example .\config\a53-demo.conf
+.\build\okmx8mm-a53-demo.exe --config .\config\a53-demo.conf
+```
+
 ### 3. 查看结果
 
 运行后查看：
@@ -91,6 +98,7 @@ runtime-data\a53-can-trace.log
 常用参数：
 
 - `--cycles N`：处理 N 批数据。
+- `--config file`：读取配置文件。
 - `--file input.csv`：读取文本输入，不用内置模拟。
 - `--storage file`：采集数据写入文件。
 - `--mqtt-outbox file`：MQTT 待发内容写入文件。
@@ -184,6 +192,7 @@ MQTT 上传看 `BOARD_RUN.md` 的“上传 MQTT”部分。
 MQTT 配置样例：
 
 ```text
+config/a53-demo.conf.example
 config/mqtt.env.example
 ```
 

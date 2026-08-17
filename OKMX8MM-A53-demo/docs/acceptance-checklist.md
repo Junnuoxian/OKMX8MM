@@ -8,6 +8,8 @@
 - [ ] 执行 `.\scripts\check-deliverable.ps1`。
 - [ ] 交付自检提示通过。
 - [ ] 执行 `.\build\okmx8mm-a53-demo.exe --cycles 3`。
+- [ ] 复制 `config\a53-demo.conf.example` 为 `config\a53-demo.conf`。
+- [ ] 执行 `.\build\okmx8mm-a53-demo.exe --config config\a53-demo.conf`。
 - [ ] 生成 `runtime-data/a53-storage.jsonl`。
 - [ ] 生成 `runtime-data/a53-storage.jsonl.cursor`。
 - [ ] 生成 `runtime-data/a53-mqtt-outbox.jsonl`。
@@ -30,6 +32,8 @@
 - [ ] 执行 `sh scripts/build-linux.sh`。
 - [ ] 生成 `build-linux/okmx8mm-a53-demo`。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --cycles 3`。
+- [ ] 复制 `config/a53-demo.conf.example` 为 `config/a53-demo.conf`。
+- [ ] 执行 `./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf`。
 - [ ] 三个输出文件都有内容。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl` 能通过。
 - [ ] 文件尾部不完整时，执行 `./build-linux/okmx8mm-a53-demo --recover-storage runtime-data/a53-storage.jsonl` 能恢复。
