@@ -1,0 +1,83 @@
+OKMX8MM Demo2 新人操作手册
+
+1. 先记住项目目标
+
+传感器数据进入外接采集板。
+M4只负责采集。
+A53负责存SD卡、上传云平台、发CAN给矿车。
+
+2. 先不要接真实硬件
+
+新人第一步先在电脑上跑模拟流程。
+模拟能跑通，再上开发板。
+开发板能跑通，再接采集板。
+采集板能读到数据，再测云平台和CAN。
+
+3. 先跑A53
+
+进入：
+D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\a53
+
+执行：
+.\scripts\test-windows.ps1
+
+看到测试通过，说明A53的软件流程正常。
+
+4. 看A53输出
+
+重点看这几个文件：
+
+runtime-data\a53-storage.jsonl
+这是模拟SD卡存储。
+
+runtime-data\a53-mqtt-outbox.jsonl
+这是准备上传云平台的数据。
+
+runtime-data\a53-can-trace.log
+这是准备发给矿车的CAN帧。
+
+runtime-data\a53-status.json
+这是程序本次运行是否正常。
+
+runtime-data\a53-heartbeat.jsonl
+这是程序心跳，证明程序还在持续处理数据。
+
+5. 再看M4
+
+进入：
+D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-Demo2\m4
+
+重点看：
+demo1\README.md
+docs\board-test-guide.txt
+
+M4当前要做的事只有一个：
+通过UART3 + RS485 + Modbus读取外接采集板。
+
+6. 真开发板联调顺序
+
+第一步：A53先跑通自检。
+第二步：M4先看调试串口有没有日志。
+第三步：接RS485采集板，看M4能不能读到数据。
+第四步：把M4数据送到A53。
+第五步：看A53是否写入SD卡文件。
+第六步：看MQTT能不能上传云平台。
+第七步：看CAN是否能被矿车或CAN工具收到。
+
+7. 如果出问题，按这个顺序查
+
+先查M4有没有采到数据。
+再查A53有没有收到数据。
+再查SD卡文件有没有新增。
+再查MQTT队列有没有新增。
+再查CAN日志或CAN工具有没有数据。
+
+不要一开始就同时查云平台、CAN和采集板，否则很容易乱。
+
+8. 当前还没完成的事
+
+真实M4到A53通信还要上板确认。
+真实采集板协议还要实测。
+SD卡、云平台、CAN总线还要实测。
+OTA只做预留，后续再补真实升级流程。
+

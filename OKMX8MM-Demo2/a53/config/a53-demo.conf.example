@@ -1,0 +1,12 @@
+# Copy this file to a53-demo.conf and edit values on the board.
+# Do not commit a53-demo.conf.
+
+cycles=3
+file=examples/m4-input.csv
+storage=/mnt/sdcard/samples.jsonl
+mqtt_outbox=/mnt/sdcard/mqtt-outbox.jsonl
+can_trace=/mnt/sdcard/can-trace.log
+status=/mnt/sdcard/status.json
+heartbeat=/mnt/sdcard/heartbeat.jsonl
+topic=truck/001
+can_id=0x321

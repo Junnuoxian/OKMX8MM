@@ -1,0 +1,91 @@
+OKMX8MM M4 demo1 上板测试
+
+一、使用文件
+
+demo1_m4.elf：Linux remoteproc 优先使用。
+demo1_m4.bin：U-Boot 或调试器使用。
+
+二、先接线
+
+1. PC 接开发板调试串口。
+2. 串口参数：115200，8N1。
+3. 先不要接 RS485 采集板，先确认 M4 能启动。
+4. M4 程序默认日志串口：UART4。
+5. M4 程序默认采集口：UART3，波特率 9600。
+
+三、Linux 下启动 M4
+
+ls /sys/class/remoteproc
+
+如果能看到 remoteproc0，执行：
+
+cp demo1_m4.elf /lib/firmware/
+echo stop > /sys/class/remoteproc/remoteproc0/state
+echo demo1_m4.elf > /sys/class/remoteproc/remoteproc0/firmware
+echo start > /sys/class/remoteproc/remoteproc0/state
+cat /sys/class/remoteproc/remoteproc0/state
+
+看到 running，说明 M4 已经启动。
+
+如果没有 remoteproc0，先停下，不要乱写 U-Boot 参数。
+需要先确认当前系统的 M4 加载方式。
+
+四、看串口输出
+
+启动后，调试串口应看到 demo1 启动信息和采集批次输出。
+
+没有接 RS485 采集板时，采集可能报超时，这是正常现象。
+这一步只验证 M4 程序能跑起来。
+
+五、接 RS485 采集板
+
+开发板 UART3 接 RS485 转换电路。
+
+基本接法：
+
+UART3_TX -> RS485_DI
+UART3_RX -> RS485_RO
+GND -> GND
+RS485_A -> 采集板 A
+RS485_B -> 采集板 B
+
+如果模块需要方向控制，还要接 DE/RE。
+当前代码没有单独控制 DE/RE，建议先用自动收发 RS485 模块测试。
+
+六、采集板要求
+
+协议：Modbus RTU
+默认串口：9600，8N1
+默认从站号：1
+采集内容：8 路 4-20mA，2 路开关量，1 路转速
+
+七、判断是否成功
+
+成功现象：
+
+1. M4 串口持续打印。
+2. 接上 RS485 后不再一直超时。
+3. 能看到 AI、DI、SPEED 类数据变化。
+
+失败先查：
+
+1. A/B 是否接反。
+2. GND 是否共地。
+3. 波特率是否一致。
+4. 从站号是否为 1。
+5. 采集板是否供电。
+6. RS485 模块是否自动收发。
+
+八、下一步
+
+M4 跑通后，再做 A53：
+
+1. A53 从 M4 接收数据。
+2. A53 写 SD 卡。
+3. A53 上传云。
+4. A53 通过 CAN 发给矿车。
+
+九、当前结论
+
+当前已完成：M4 固件编译、主机测试、上板测试包。
+当前未完成：真实开发板运行验证、真实 RS485 采集验证。
