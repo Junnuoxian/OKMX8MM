@@ -69,7 +69,9 @@ A53 需要支持三种阶段：
 - 默认文件为 `runtime-data/a53-can-trace.log`。
 - 可通过 `--can-trace file` 指定输出文件。
 - 可通过 `--can-id 0x321` 指定 CAN ID。
-- 后续接 Linux SocketCAN 后，把写日志替换成真实 CAN 发送。
+- 可复制 `config/can.env.example` 为 `config/can.env` 后填写 CAN 网口名。
+- 当前用 `scripts/send-can-trace.sh` 把 CAN 记录转换为 `cansend` 命令。
+- 后续稳定后，可把写日志替换成直接调用 SocketCAN。
 
 ## 开发板验收
 
@@ -87,6 +89,7 @@ A53 需要支持三种阶段：
 - 使用 `--file examples/m4-input.csv --cycles 3` 能运行。
 - 输出内容跟输入文件的 `ai0` 到 `ai9` 对应。
 - MQTT dry-run 能打印 topic 和 payload。
+- CAN dry-run 能打印 `cansend can0`。
 
 第三阶段验收：
 

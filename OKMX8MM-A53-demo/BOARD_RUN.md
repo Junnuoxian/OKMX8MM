@@ -73,12 +73,35 @@ sh scripts/publish-mqtt-outbox.sh --clear-on-success
 
 注意：不要把账号和密码写进源码、说明或 Git。
 
+## 发送 CAN
+
+先只看要发送的 CAN 帧，不发到总线：
+
+```sh
+sh scripts/send-can-trace.sh --dry-run
+```
+
+确认 `can0` 已正常后，再发送：
+
+```sh
+cp config/can.env.example config/can.env
+vi config/can.env
+sh scripts/send-can-trace.sh --env config/can.env
+```
+
+发送成功后，如果确认可以清空 CAN 记录：
+
+```sh
+sh scripts/send-can-trace.sh --clear-on-success
+```
+
 ## 判断是否正常
 
 - 程序提示写入 3 批数据。
 - 三个输出文件都有内容。
 - `a53-storage.jsonl` 能看到 `ai0` 到 `ai9`。
 - `a53-can-trace.log` 能看到 `CAN id=0x321`。
+- CAN dry-run 能看到 `cansend can0`。
 
 ## 接真实 M4 的位置
 
@@ -93,5 +116,4 @@ src/m4_file_source.c
 ## 当前还没做
 
 - 还没接真实 SD 卡。
-- 还没接真实 CAN 总线。
 - 还没和真实 M4 通信联调。

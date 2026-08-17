@@ -48,7 +48,8 @@ fi
 
 command -v jq >/dev/null 2>&1 && pass 'jq found' || warn 'jq not found'
 command -v mosquitto_pub >/dev/null 2>&1 && pass 'mosquitto_pub found' || warn 'mosquitto_pub not found'
+command -v cansend >/dev/null 2>&1 && pass 'cansend found' || warn 'cansend not found'
 
 warn 'MQTT publish requires MQTT_HOST and publish-mqtt-outbox.sh'
-warn 'CAN is still trace file mode in this demo'
+warn 'CAN send requires can0 and send-can-trace.sh'
 printf 'check finished\n'

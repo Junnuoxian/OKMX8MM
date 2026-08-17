@@ -149,6 +149,8 @@ MQTT 配置样例：
 config/mqtt.env.example
 ```
 
+CAN 发送看 `BOARD_RUN.md` 的“发送 CAN”部分。
+
 ## 生成开发板压缩包
 
 ```powershell
