@@ -4,6 +4,9 @@
 
 - [ ] 执行 `.\scripts\test-windows.ps1`。
 - [ ] 测试结果为 `5/5` 通过。
+- [ ] 执行 `.\scripts\package-board.ps1`。
+- [ ] 执行 `.\scripts\check-deliverable.ps1`。
+- [ ] 交付自检提示通过。
 - [ ] 执行 `.\build\okmx8mm-a53-demo.exe --cycles 3`。
 - [ ] 生成 `runtime-data/a53-storage.jsonl`。
 - [ ] 生成 `runtime-data/a53-mqtt-outbox.jsonl`。

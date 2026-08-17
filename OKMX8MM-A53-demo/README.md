@@ -135,6 +135,13 @@ src\m4_file_source.c
 .\scripts\test-windows.ps1
 ```
 
+## 交付自检
+
+```powershell
+.\scripts\package-board.ps1
+.\scripts\check-deliverable.ps1
+```
+
 ## 开发板运行
 
 看：
