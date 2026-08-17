@@ -78,7 +78,7 @@ runtime-data/a53-mqtt-outbox.jsonl
 一行示例：
 
 ```json
-{"topic":"mine-truck/demo1","payload":{"sequence":0,"ai0":1000,"di_bits":1,"speed_pulse_delta":11}}
+{"sequence":0,"qos":1,"topic":"mine-truck/demo1","payload":{"ai0":1000,"di_bits":1,"speed_pulse_delta":11}}
 ```
 
 发送方式：
@@ -86,6 +86,8 @@ runtime-data/a53-mqtt-outbox.jsonl
 ```sh
 MQTT_HOST=test sh scripts/publish-mqtt-outbox.sh --dry-run
 ```
+
+说明：`qos` 默认是 1，发送脚本会把它传给 `mosquitto_pub -q`。
 
 ## CAN Trace
 

@@ -61,7 +61,8 @@ A53 需要支持三种阶段：
 - 默认文件为 `runtime-data/a53-mqtt-outbox.jsonl`。
 - 可通过 `--mqtt-outbox file` 指定输出文件。
 - 可通过 `--topic name` 指定 MQTT topic。
-- 发布脚本使用 `MQTT_HOST`、`MQTT_PORT`、`MQTT_USER`、`MQTT_PASSWORD`。
+- MQTT 待发送文件每行包含 `sequence`、`qos`、`topic` 和 `payload`。
+- 发布脚本使用 `MQTT_HOST`、`MQTT_PORT`、`MQTT_QOS`、`MQTT_USER`、`MQTT_PASSWORD`。
 - 可复制 `config/mqtt.env.example` 为 `config/mqtt.env` 后填写 MQTT 参数。
 - 账号和密码不能写进源码、说明或 Git。
 

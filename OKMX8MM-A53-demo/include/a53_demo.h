@@ -7,7 +7,8 @@
 enum {
     A53_ANALOG_CHANNEL_COUNT = 10,
     A53_BATCH_SAMPLE_COUNT = 10,
-    A53_SAMPLE_RATE_HZ = 2000
+    A53_SAMPLE_RATE_HZ = 2000,
+    A53_MQTT_DEFAULT_QOS = 1
 };
 
 typedef enum {

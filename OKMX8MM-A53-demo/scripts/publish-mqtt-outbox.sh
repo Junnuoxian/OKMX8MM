@@ -12,6 +12,7 @@ Required:
 
 Optional:
   MQTT_PORT       Default: 1883
+  MQTT_QOS        Default: 1
   MQTT_USER       MQTT user name
   MQTT_PASSWORD   MQTT password
 EOF
@@ -72,6 +73,7 @@ command -v jq >/dev/null 2>&1 || { printf 'jq is required\n' >&2; exit 1; }
 [ -f "$OUTBOX_FILE" ] || { printf 'Outbox file not found: %s\n' "$OUTBOX_FILE" >&2; exit 1; }
 
 MQTT_PORT=${MQTT_PORT:-1883}
+MQTT_QOS=${MQTT_QOS:-1}
 if [ -n "${MQTT_USER:-}" ] || [ -n "${MQTT_PASSWORD:-}" ]; then
     [ -n "${MQTT_USER:-}" ] && [ -n "${MQTT_PASSWORD:-}" ] || {
         printf 'MQTT_USER and MQTT_PASSWORD must be set together\n' >&2
@@ -83,14 +85,22 @@ count=0
 while IFS= read -r line || [ -n "$line" ]; do
     [ -n "$line" ] || continue
     topic=$(printf '%s' "$line" | jq -er '.topic')
+    qos=$(printf '%s' "$line" | jq -er --arg default_qos "$MQTT_QOS" '(.qos // $default_qos) | tonumber')
     payload=$(printf '%s' "$line" | jq -ec '.payload')
+    case "$qos" in
+        0|1|2) ;;
+        *)
+            printf 'Invalid MQTT qos: %s\n' "$qos" >&2
+            exit 2
+            ;;
+    esac
 
     if [ "$DRY_RUN" -eq 1 ]; then
-        printf 'DRY RUN topic=%s payload=%s\n' "$topic" "$payload"
+        printf 'DRY RUN qos=%s topic=%s payload=%s\n' "$qos" "$topic" "$payload"
     elif [ -n "${MQTT_USER:-}" ]; then
-        mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASSWORD" -t "$topic" -m "$payload"
+        mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -q "$qos" -u "$MQTT_USER" -P "$MQTT_PASSWORD" -t "$topic" -m "$payload"
     else
-        mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -t "$topic" -m "$payload"
+        mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -q "$qos" -t "$topic" -m "$payload"
     fi
     count=$((count + 1))
 done < "$OUTBOX_FILE"

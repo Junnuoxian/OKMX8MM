@@ -115,7 +115,7 @@ a53-storage.jsonl.cursor
 
 ### MQTT 文件
 
-`a53-mqtt-outbox.jsonl` 保存待发送内容。以后接入 MQTT 时，将写文件的函数替换为 MQTT 发布函数。
+`a53-mqtt-outbox.jsonl` 保存待发送内容，每行包含 `sequence`、`qos`、`topic` 和 `payload`。开发板上可用 `scripts/publish-mqtt-outbox.sh` 发布，默认 `qos` 为 1。
 
 ### CAN 文件
 

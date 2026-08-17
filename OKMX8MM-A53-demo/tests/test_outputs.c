@@ -94,8 +94,9 @@ static int writers_create_beginner_readable_output_files(void)
 
     TEST_ASSERT_EQ_INT(0, a53_mqtt_outbox_append(mqtt_path, "mine-truck/demo1", &batch));
     TEST_ASSERT_EQ_INT(0, read_file(mqtt_path, text, sizeof(text)));
+    TEST_ASSERT_TRUE(strstr(text, "{\"sequence\":0,\"qos\":1,") != NULL);
     TEST_ASSERT_TRUE(strstr(text, "\"topic\":\"mine-truck/demo1\"") != NULL);
-    TEST_ASSERT_TRUE(strstr(text, "\"sequence\":0") != NULL);
+    TEST_ASSERT_TRUE(strstr(text, "\"payload\":{\"ai0\":1000") != NULL);
 
     TEST_ASSERT_EQ_INT(0, a53_can_trace_append(can_path, 0x321u, &batch));
     TEST_ASSERT_EQ_INT(0, read_file(can_path, text, sizeof(text)));

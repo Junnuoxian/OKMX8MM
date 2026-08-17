@@ -63,6 +63,8 @@ cat runtime-data/a53-can-trace.log
 MQTT_HOST=test sh scripts/publish-mqtt-outbox.sh --dry-run
 ```
 
+dry-run 会打印 `qos`、`topic` 和 `payload`。
+
 确认格式后，设置真实 MQTT 参数再发布：
 
 ```sh
