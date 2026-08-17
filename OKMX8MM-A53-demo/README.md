@@ -59,6 +59,7 @@ docs/acceptance-checklist.md
   --storage runtime-data\sd-samples.jsonl `
   --mqtt-outbox runtime-data\mqtt.jsonl `
   --can-trace runtime-data\can.log `
+  --status runtime-data\status.json `
   --topic truck/001 `
   --can-id 0x456
 ```
@@ -78,9 +79,10 @@ Copy-Item .\config\a53-demo.conf.example .\config\a53-demo.conf
 runtime-data\a53-storage.jsonl
 runtime-data\a53-mqtt-outbox.jsonl
 runtime-data\a53-can-trace.log
+runtime-data\a53-status.json
 ```
 
-每处理一批 M4 数据，三个文件各增加一行。
+每处理一批 M4 数据，前三个文件各增加一行；状态文件记录本次运行是否正常。
 
 校验存储游标：
 
@@ -103,6 +105,7 @@ runtime-data\a53-can-trace.log
 - `--storage file`：采集数据写入文件。
 - `--mqtt-outbox file`：MQTT 待发内容写入文件。
 - `--can-trace file`：CAN 内容写入文件。
+- `--status file`：运行状态写入文件。
 - `--topic name`：设置 MQTT topic。
 - `--can-id 0x321`：设置 CAN ID。
 - `--check-storage file`：检查存储文件和 `.cursor` 是否匹配。
@@ -136,6 +139,10 @@ a53-storage.jsonl.cursor
 ### CAN 文件
 
 `a53-can-trace.log` 保存待发送的 CAN 内容。以后接入 Linux SocketCAN 或开发板 CAN 驱动时，将写文件的函数替换为 CAN 发送函数。
+
+### 状态文件
+
+`a53-status.json` 保存本次运行结果。正常时能看到 `ok=true`、`processed_batches` 和 `last_sequence`；跳号或乱序时能看到 `ok=false` 和 `error`。
 
 ## 换成真实 M4 数据
 

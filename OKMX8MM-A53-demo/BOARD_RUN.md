@@ -38,7 +38,8 @@ sh scripts/build-linux.sh
 ./build-linux/okmx8mm-a53-demo --cycles 3 \
   --storage /mnt/sdcard/samples.jsonl \
   --mqtt-outbox /mnt/sdcard/mqtt-outbox.jsonl \
-  --can-trace /mnt/sdcard/can-trace.log
+  --can-trace /mnt/sdcard/can-trace.log \
+  --status /mnt/sdcard/status.json
 ```
 
 8. 也可以用配置文件运行：
@@ -55,6 +56,7 @@ vi config/a53-demo.conf
 cat runtime-data/a53-storage.jsonl
 cat runtime-data/a53-mqtt-outbox.jsonl
 cat runtime-data/a53-can-trace.log
+cat runtime-data/a53-status.json
 ```
 
 10. 校验存储游标：
@@ -122,6 +124,7 @@ sh scripts/send-can-trace.sh --clear-on-success
 
 - 程序提示写入 3 批数据。
 - 三个输出文件都有内容。
+- `a53-status.json` 能看到 `ok=true`。
 - `a53-storage.jsonl` 能看到 `ai0` 到 `ai9`。
 - `--recover-storage` 可截掉最后一行不完整内容。
 - `a53-can-trace.log` 能看到 `CAN id=0x321`。

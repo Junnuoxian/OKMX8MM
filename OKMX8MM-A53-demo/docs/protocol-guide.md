@@ -21,6 +21,7 @@ file=examples/m4-input.csv
 storage=/mnt/sdcard/samples.jsonl
 mqtt_outbox=/mnt/sdcard/mqtt-outbox.jsonl
 can_trace=/mnt/sdcard/can-trace.log
+status=/mnt/sdcard/status.json
 topic=truck/001
 can_id=0x321
 ```
@@ -148,6 +149,26 @@ payload 说明：
 | 7 | 保留 |
 
 说明：`frame=` 字段由 C 程序直接生成，`send-can-trace.sh` 会优先使用它；旧格式没有 `frame=` 时，脚本仍会按字段临时转换。
+
+## Status
+
+默认文件：
+
+```text
+runtime-data/a53-status.json
+```
+
+成功示例：
+
+```json
+{"ok":true,"processed_batches":3,"last_sequence":2}
+```
+
+跳号示例：
+
+```json
+{"ok":false,"processed_batches":1,"last_sequence":0,"error":"sequence_gap","expected_sequence":1,"actual_sequence":2}
+```
 
 ## 后续要统一的地方
 

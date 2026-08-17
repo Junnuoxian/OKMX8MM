@@ -14,6 +14,8 @@
 - [ ] 生成 `runtime-data/a53-storage.jsonl.cursor`。
 - [ ] 生成 `runtime-data/a53-mqtt-outbox.jsonl`。
 - [ ] 生成 `runtime-data/a53-can-trace.log`。
+- [ ] 生成 `runtime-data/a53-status.json`。
+- [ ] 状态文件能看到 `ok=true`。
 - [ ] 存储文件能看到 `ai0` 到 `ai9`。
 - [ ] 存储游标能看到 `sequence`。
 - [ ] 存储游标能看到 `line_checksum`。
@@ -35,6 +37,7 @@
 - [ ] 复制 `config/a53-demo.conf.example` 为 `config/a53-demo.conf`。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf`。
 - [ ] 三个输出文件都有内容。
+- [ ] `a53-status.json` 能看到 `ok=true`。
 - [ ] 执行 `./build-linux/okmx8mm-a53-demo --check-storage runtime-data/a53-storage.jsonl` 能通过。
 - [ ] 文件尾部不完整时，执行 `./build-linux/okmx8mm-a53-demo --recover-storage runtime-data/a53-storage.jsonl` 能恢复。
 
@@ -45,6 +48,7 @@
 - [ ] `ai0` 第一批为 `1000`。
 - [ ] `ai9` 第一批为 `1009`。
 - [ ] 输入文件的 `sequence` 跳号时，程序会停止本轮处理。
+- [ ] 跳号后状态文件能看到 `error`。
 
 ## MQTT 验收
 

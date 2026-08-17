@@ -45,12 +45,14 @@ typedef struct {
     const char *storage_path;
     const char *mqtt_outbox_path;
     const char *can_trace_path;
+    const char *status_path;
     const char *mqtt_topic;
     uint32_t can_id;
     char source_path_value[A53_OPTION_TEXT_CAPACITY];
     char storage_path_value[A53_OPTION_TEXT_CAPACITY];
     char mqtt_outbox_path_value[A53_OPTION_TEXT_CAPACITY];
     char can_trace_path_value[A53_OPTION_TEXT_CAPACITY];
+    char status_path_value[A53_OPTION_TEXT_CAPACITY];
     char mqtt_topic_value[A53_OPTION_TEXT_CAPACITY];
 } a53_cli_options_t;
 
@@ -60,6 +62,7 @@ typedef struct {
     const char *storage_path;
     const char *mqtt_outbox_path;
     const char *can_trace_path;
+    const char *status_path;
     const char *mqtt_topic;
     uint32_t can_id;
     uint32_t cycles;

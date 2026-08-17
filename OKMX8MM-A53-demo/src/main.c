@@ -10,7 +10,7 @@ int main(int argc, char **argv)
     if (a53_cli_parse(argc, (const char **)argv, &options) != 0) {
         fputs("Usage: okmx8mm-a53-demo [cycles] [--config file] [--cycles N] [--file input.csv]\n", stderr);
         fputs("       [--check-storage storage.jsonl] [--recover-storage storage.jsonl]\n", stderr);
-        fputs("       [--storage file] [--mqtt-outbox file] [--can-trace file]\n", stderr);
+        fputs("       [--storage file] [--mqtt-outbox file] [--can-trace file] [--status file]\n", stderr);
         fputs("       [--topic name] [--can-id 0x321]\n", stderr);
         return 2;
     }
@@ -38,6 +38,7 @@ int main(int argc, char **argv)
     config.storage_path = options.storage_path;
     config.mqtt_outbox_path = options.mqtt_outbox_path;
     config.can_trace_path = options.can_trace_path;
+    config.status_path = options.status_path;
     config.mqtt_topic = options.mqtt_topic;
     config.can_id = options.can_id;
     config.cycles = options.cycles;
@@ -51,5 +52,6 @@ int main(int argc, char **argv)
     printf("storage: %s\n", config.storage_path);
     printf("mqtt outbox: %s\n", config.mqtt_outbox_path);
     printf("can trace: %s\n", config.can_trace_path);
+    printf("status: %s\n", config.status_path);
     return 0;
 }

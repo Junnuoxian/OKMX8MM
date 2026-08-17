@@ -17,6 +17,7 @@
 - 支持保存采集数据到 JSONL 文件。
 - 支持生成 MQTT 待发送文件。
 - 支持生成 CAN 记录文件。
+- 支持生成运行状态文件。
 - 支持自定义输出文件、MQTT topic、CAN ID。
 - 支持 `--config file` 读取开发板运行配置。
 - 支持开发板环境检查脚本。
@@ -54,10 +55,12 @@ A53 会检查相邻批次的 `sequence` 是否连续；如果发现丢批或乱�
 
 - 每批数据保存一行 JSONL。
 - 默认写入 `runtime-data/a53-storage.jsonl`。
+- 默认运行状态写入 `runtime-data/a53-status.json`。
 - 同时写入同名 `.cursor` 文件，记录最新批次、写入位置和行校验。
 - 支持 `--check-storage file` 检查存储文件和 `.cursor` 是否匹配。
 - 支持 `--recover-storage file` 截掉最后一行不完整内容。
 - 可通过 `--storage file` 指定输出文件。
+- 可通过 `--status file` 指定运行状态文件。
 - 可通过 `config/a53-demo.conf.example` 快速配置输入和输出文件。
 - 开发板联调时可把输出文件放到 SD 卡挂载目录。
 
@@ -92,6 +95,7 @@ A53 会检查相邻批次的 `sequence` 是否连续；如果发现丢批或乱�
 - `./build-linux/okmx8mm-a53-demo --cycles 3` 能运行。
 - `./build-linux/okmx8mm-a53-demo --config config/a53-demo.conf` 能运行。
 - 三个输出文件都有内容。
+- 状态文件能看到 `ok=true`。
 - 存储文件能看到 `ai0` 到 `ai9`。
 - 存储 `.cursor` 文件能看到最新 `sequence`。
 - `--check-storage runtime-data/a53-storage.jsonl` 能通过。

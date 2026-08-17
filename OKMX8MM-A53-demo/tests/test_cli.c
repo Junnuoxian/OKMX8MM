@@ -27,6 +27,7 @@ static int cli_defaults_to_replay_source(void)
     TEST_ASSERT_EQ_STR("runtime-data/a53-storage.jsonl", options.storage_path);
     TEST_ASSERT_EQ_STR("runtime-data/a53-mqtt-outbox.jsonl", options.mqtt_outbox_path);
     TEST_ASSERT_EQ_STR("runtime-data/a53-can-trace.log", options.can_trace_path);
+    TEST_ASSERT_EQ_STR("runtime-data/a53-status.json", options.status_path);
     TEST_ASSERT_EQ_STR("mine-truck/demo1", options.mqtt_topic);
     TEST_ASSERT_EQ_INT(0x321, options.can_id);
     return 0;
@@ -88,6 +89,8 @@ static int cli_accepts_output_settings(void)
         "/var/lib/mine/mqtt.jsonl",
         "--can-trace",
         "/var/log/mine/can.log",
+        "--status",
+        "/var/log/mine/status.json",
         "--topic",
         "truck/001",
         "--can-id",
@@ -95,10 +98,11 @@ static int cli_accepts_output_settings(void)
     };
     a53_cli_options_t options;
 
-    TEST_ASSERT_EQ_INT(0, a53_cli_parse(11, argv, &options));
+    TEST_ASSERT_EQ_INT(0, a53_cli_parse(13, argv, &options));
     TEST_ASSERT_EQ_STR("/mnt/sdcard/samples.jsonl", options.storage_path);
     TEST_ASSERT_EQ_STR("/var/lib/mine/mqtt.jsonl", options.mqtt_outbox_path);
     TEST_ASSERT_EQ_STR("/var/log/mine/can.log", options.can_trace_path);
+    TEST_ASSERT_EQ_STR("/var/log/mine/status.json", options.status_path);
     TEST_ASSERT_EQ_STR("truck/001", options.mqtt_topic);
     TEST_ASSERT_EQ_INT(0x456, options.can_id);
     return 0;
@@ -122,6 +126,7 @@ static int cli_loads_beginner_config_file(void)
         "storage=/mnt/sdcard/samples.jsonl\n"
         "mqtt_outbox=/mnt/sdcard/mqtt-outbox.jsonl\n"
         "can_trace=/mnt/sdcard/can-trace.log\n"
+        "status=/mnt/sdcard/status.json\n"
         "topic=truck/001\n"
         "can_id=0x456\n"));
 
@@ -132,6 +137,7 @@ static int cli_loads_beginner_config_file(void)
     TEST_ASSERT_EQ_STR("/mnt/sdcard/samples.jsonl", options.storage_path);
     TEST_ASSERT_EQ_STR("/mnt/sdcard/mqtt-outbox.jsonl", options.mqtt_outbox_path);
     TEST_ASSERT_EQ_STR("/mnt/sdcard/can-trace.log", options.can_trace_path);
+    TEST_ASSERT_EQ_STR("/mnt/sdcard/status.json", options.status_path);
     TEST_ASSERT_EQ_STR("truck/001", options.mqtt_topic);
     TEST_ASSERT_EQ_INT(0x456, options.can_id);
 

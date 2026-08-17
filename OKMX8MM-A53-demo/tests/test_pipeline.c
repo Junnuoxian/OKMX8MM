@@ -21,21 +21,38 @@ static int count_lines(const char *path)
     return lines;
 }
 
+static int read_file(const char *path, char *buffer, size_t size)
+{
+    FILE *file = fopen(path, "rb");
+    size_t used;
+    if (file == NULL) {
+        return -1;
+    }
+    used = fread(buffer, 1, size - 1, file);
+    buffer[used] = '\0';
+    fclose(file);
+    return 0;
+}
+
 static int pipeline_processes_requested_m4_batches(void)
 {
     const char *storage_path = "pipeline-storage.jsonl";
     const char *mqtt_path = "pipeline-mqtt-outbox.jsonl";
     const char *can_path = "pipeline-can-trace.log";
+    const char *status_path = "pipeline-status.json";
+    char status_text[512];
     a53_pipeline_config_t config;
 
     remove(storage_path);
     remove(mqtt_path);
     remove(can_path);
+    remove(status_path);
 
     memset(&config, 0, sizeof(config));
     config.storage_path = storage_path;
     config.mqtt_outbox_path = mqtt_path;
     config.can_trace_path = can_path;
+    config.status_path = status_path;
     config.mqtt_topic = "mine-truck/demo1";
     config.can_id = 0x321u;
     config.cycles = 3;
@@ -44,10 +61,15 @@ static int pipeline_processes_requested_m4_batches(void)
     TEST_ASSERT_EQ_INT(3, count_lines(storage_path));
     TEST_ASSERT_EQ_INT(3, count_lines(mqtt_path));
     TEST_ASSERT_EQ_INT(3, count_lines(can_path));
+    TEST_ASSERT_EQ_INT(0, read_file(status_path, status_text, sizeof(status_text)));
+    TEST_ASSERT_TRUE(strstr(status_text, "\"ok\":true") != NULL);
+    TEST_ASSERT_TRUE(strstr(status_text, "\"processed_batches\":3") != NULL);
+    TEST_ASSERT_TRUE(strstr(status_text, "\"last_sequence\":2") != NULL);
 
     remove(storage_path);
     remove(mqtt_path);
     remove(can_path);
+    remove(status_path);
     return 0;
 }
 
@@ -100,12 +122,15 @@ static int pipeline_rejects_non_continuous_file_sequence(void)
     const char *storage_path = "pipeline-gap-storage.jsonl";
     const char *mqtt_path = "pipeline-gap-mqtt-outbox.jsonl";
     const char *can_path = "pipeline-gap-can-trace.log";
+    const char *status_path = "pipeline-gap-status.json";
+    char status_text[512];
     a53_pipeline_config_t config;
 
     remove(input_path);
     remove(storage_path);
     remove(mqtt_path);
     remove(can_path);
+    remove(status_path);
 
     {
         FILE *file = fopen(input_path, "wb");
@@ -121,6 +146,7 @@ static int pipeline_rejects_non_continuous_file_sequence(void)
     config.storage_path = storage_path;
     config.mqtt_outbox_path = mqtt_path;
     config.can_trace_path = can_path;
+    config.status_path = status_path;
     config.mqtt_topic = "mine-truck/demo1";
     config.can_id = 0x321u;
     config.cycles = 2;
@@ -129,11 +155,19 @@ static int pipeline_rejects_non_continuous_file_sequence(void)
     TEST_ASSERT_EQ_INT(1, count_lines(storage_path));
     TEST_ASSERT_EQ_INT(1, count_lines(mqtt_path));
     TEST_ASSERT_EQ_INT(1, count_lines(can_path));
+    TEST_ASSERT_EQ_INT(0, read_file(status_path, status_text, sizeof(status_text)));
+    TEST_ASSERT_TRUE(strstr(status_text, "\"ok\":false") != NULL);
+    TEST_ASSERT_TRUE(strstr(status_text, "\"processed_batches\":1") != NULL);
+    TEST_ASSERT_TRUE(strstr(status_text, "\"last_sequence\":0") != NULL);
+    TEST_ASSERT_TRUE(strstr(status_text, "\"error\":\"sequence_gap\"") != NULL);
+    TEST_ASSERT_TRUE(strstr(status_text, "\"expected_sequence\":1") != NULL);
+    TEST_ASSERT_TRUE(strstr(status_text, "\"actual_sequence\":2") != NULL);
 
     remove(input_path);
     remove(storage_path);
     remove(mqtt_path);
     remove(can_path);
+    remove(status_path);
     return 0;
 }
 

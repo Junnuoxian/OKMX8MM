@@ -6,5 +6,6 @@ file=examples/m4-input.csv
 storage=/mnt/sdcard/samples.jsonl
 mqtt_outbox=/mnt/sdcard/mqtt-outbox.jsonl
 can_trace=/mnt/sdcard/can-trace.log
+status=/mnt/sdcard/status.json
 topic=truck/001
 can_id=0x321

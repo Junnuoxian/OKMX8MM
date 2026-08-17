@@ -131,6 +131,15 @@ static int apply_config_value(a53_cli_options_t *options, const char *key, const
         options->can_trace_path = options->can_trace_path_value;
         return 0;
     }
+    if (strcmp(key, "status") == 0) {
+        if (copy_option_text(options->status_path_value,
+                sizeof(options->status_path_value),
+                value) != 0) {
+            return -1;
+        }
+        options->status_path = options->status_path_value;
+        return 0;
+    }
     if (strcmp(key, "topic") == 0) {
         if (copy_option_text(options->mqtt_topic_value,
                 sizeof(options->mqtt_topic_value),
@@ -207,12 +216,14 @@ int a53_cli_parse(int argc, const char **argv, a53_cli_options_t *options)
     options->storage_path = "runtime-data/a53-storage.jsonl";
     options->mqtt_outbox_path = "runtime-data/a53-mqtt-outbox.jsonl";
     options->can_trace_path = "runtime-data/a53-can-trace.log";
+    options->status_path = "runtime-data/a53-status.json";
     options->mqtt_topic = "mine-truck/demo1";
     options->can_id = 0x321u;
     options->source_path_value[0] = '\0';
     options->storage_path_value[0] = '\0';
     options->mqtt_outbox_path_value[0] = '\0';
     options->can_trace_path_value[0] = '\0';
+    options->status_path_value[0] = '\0';
     options->mqtt_topic_value[0] = '\0';
 
     for (index = 1; index < argc; index++) {
@@ -255,6 +266,11 @@ int a53_cli_parse(int argc, const char **argv, a53_cli_options_t *options)
                 return -1;
             }
             options->can_trace_path = argv[++index];
+        } else if (strcmp(argv[index], "--status") == 0) {
+            if (index + 1 >= argc) {
+                return -1;
+            }
+            options->status_path = argv[++index];
         } else if (strcmp(argv[index], "--topic") == 0) {
             if (index + 1 >= argc) {
                 return -1;
