@@ -16,21 +16,44 @@ static int read_file(const char *path, char *buffer, size_t size)
     return 0;
 }
 
+static long file_size(const char *path)
+{
+    FILE *file = fopen(path, "rb");
+    long size;
+    if (file == NULL) {
+        return -1;
+    }
+    if (fseek(file, 0, SEEK_END) != 0) {
+        fclose(file);
+        return -1;
+    }
+    size = ftell(file);
+    fclose(file);
+    return size;
+}
+
 static int writers_create_beginner_readable_output_files(void)
 {
     const char *storage_path = "test-storage.jsonl";
+    const char *storage_cursor_path = "test-storage.jsonl.cursor";
     const char *mqtt_path = "test-mqtt-outbox.jsonl";
     const char *can_path = "test-can-trace.log";
     char text[2048];
     a53_m4_source_t source;
     a53_m4_batch_t batch;
+    a53_m4_batch_t second_batch;
+    long first_size;
+    long second_size;
+    long line_bytes = 0;
 
     remove(storage_path);
+    remove(storage_cursor_path);
     remove(mqtt_path);
     remove(can_path);
 
     TEST_ASSERT_EQ_INT(0, a53_m4_replay_open(&source));
     TEST_ASSERT_EQ_INT(0, a53_m4_source_read(&source, &batch));
+    TEST_ASSERT_EQ_INT(0, a53_m4_source_read(&source, &second_batch));
     a53_m4_source_close(&source);
 
     TEST_ASSERT_EQ_INT(0, a53_storage_append_batch(storage_path, &batch));
@@ -38,6 +61,20 @@ static int writers_create_beginner_readable_output_files(void)
     TEST_ASSERT_TRUE(strstr(text, "\"sequence\":0") != NULL);
     TEST_ASSERT_TRUE(strstr(text, "\"ai0\":1000") != NULL);
     TEST_ASSERT_TRUE(strstr(text, "\"di_bits\":1") != NULL);
+    TEST_ASSERT_EQ_INT(0, read_file(storage_cursor_path, text, sizeof(text)));
+    TEST_ASSERT_TRUE(strstr(text, "file=test-storage.jsonl") != NULL);
+    TEST_ASSERT_TRUE(strstr(text, "sequence=0") != NULL);
+    TEST_ASSERT_TRUE(strstr(text, "byte_offset=") != NULL);
+    TEST_ASSERT_TRUE(strstr(text, "line_bytes=") != NULL);
+    first_size = file_size(storage_path);
+    TEST_ASSERT_TRUE(first_size > 0);
+    TEST_ASSERT_EQ_INT(0, a53_storage_append_batch(storage_path, &second_batch));
+    second_size = file_size(storage_path);
+    TEST_ASSERT_TRUE(second_size > first_size);
+    TEST_ASSERT_EQ_INT(0, read_file(storage_cursor_path, text, sizeof(text)));
+    TEST_ASSERT_TRUE(strstr(text, "sequence=1") != NULL);
+    TEST_ASSERT_TRUE(sscanf(strstr(text, "line_bytes="), "line_bytes=%ld", &line_bytes) == 1);
+    TEST_ASSERT_EQ_INT(second_size - first_size, line_bytes);
 
     TEST_ASSERT_EQ_INT(0, a53_mqtt_outbox_append(mqtt_path, "mine-truck/demo1", &batch));
     TEST_ASSERT_EQ_INT(0, read_file(mqtt_path, text, sizeof(text)));
@@ -50,6 +87,7 @@ static int writers_create_beginner_readable_output_files(void)
     TEST_ASSERT_TRUE(strstr(text, "ai0=1000") != NULL);
 
     remove(storage_path);
+    remove(storage_cursor_path);
     remove(mqtt_path);
     remove(can_path);
     return 0;

@@ -98,6 +98,14 @@ runtime-data\a53-can-trace.log
 - 转速脉冲数
 - 转速周期
 
+同时会生成：
+
+```text
+a53-storage.jsonl.cursor
+```
+
+它记录最新写入的批次序号、字节偏移和行长度，用于后续断电恢复扩展。
+
 ### MQTT 文件
 
 `a53-mqtt-outbox.jsonl` 保存待发送内容。以后接入 MQTT 时，将写文件的函数替换为 MQTT 发布函数。

@@ -37,6 +37,28 @@ runtime-data/a53-storage.jsonl
 {"sequence":0,"source":"m4-replay","sample_rate_hz":2000,"samples":10,"di_bits":1,"speed_pulse_delta":11,"speed_period_us":50000,"first_sample":{"ai0":1000,"ai1":1001,"ai2":1002,"ai3":1003,"ai4":1004,"ai5":1005,"ai6":1006,"ai7":1007,"ai8":1008,"ai9":1009}}
 ```
 
+## 存储游标
+
+每次写入存储文件后，会覆盖写同名 `.cursor` 文件。
+
+示例：
+
+```text
+file=a53-storage.jsonl
+sequence=0
+byte_offset=268
+line_bytes=268
+```
+
+字段说明：
+
+| 字段 | 含义 |
+| --- | --- |
+| `file` | 对应的存储文件名 |
+| `sequence` | 最新写入批次 |
+| `byte_offset` | 最新写入后的文件偏移 |
+| `line_bytes` | 最新一行字节数 |
+
 ## MQTT Outbox
 
 默认文件：

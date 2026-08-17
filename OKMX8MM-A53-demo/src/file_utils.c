@@ -53,3 +53,11 @@ FILE *a53_open_append_text(const char *path)
     }
     return fopen(path, "ab");
 }
+
+FILE *a53_open_write_text(const char *path)
+{
+    if (ensure_parent_directories(path) != 0) {
+        return NULL;
+    }
+    return fopen(path, "wb");
+}

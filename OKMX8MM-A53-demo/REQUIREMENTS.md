@@ -50,6 +50,7 @@ A53 需要支持三种阶段：
 
 - 每批数据保存一行 JSONL。
 - 默认写入 `runtime-data/a53-storage.jsonl`。
+- 同时写入同名 `.cursor` 文件，记录最新批次和写入位置。
 - 可通过 `--storage file` 指定输出文件。
 - 开发板联调时可把输出文件放到 SD 卡挂载目录。
 
@@ -82,6 +83,7 @@ A53 需要支持三种阶段：
 - `./build-linux/okmx8mm-a53-demo --cycles 3` 能运行。
 - 三个输出文件都有内容。
 - 存储文件能看到 `ai0` 到 `ai9`。
+- 存储 `.cursor` 文件能看到最新 `sequence`。
 - CAN 记录能看到 `CAN id=0x321`。
 
 第二阶段验收：

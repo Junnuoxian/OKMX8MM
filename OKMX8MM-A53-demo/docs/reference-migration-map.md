@@ -25,7 +25,7 @@ D:\Codex_AI\YY_Demo\OKMX8MM\OKMX8MM-A53-demo
 
 | 功能 | 参考工程模块 | 当前 A53 文件 | 后续动作 |
 | --- | --- | --- | --- |
-| 存储 | `modules/storage` | `src/storage_writer.c` | 后续移植断电恢复、游标、空间检查 |
+| 存储 | `modules/storage` | `src/storage_writer.c` | 已有最小游标；后续移植 CRC、尾部恢复、空间检查 |
 | MQTT | `modules/mqtt` | `src/mqtt_outbox.c`、`scripts/publish-mqtt-outbox.sh` | 后续移植 payload 编码、重发队列 |
 | CAN | `modules/can` | `src/can_trace.c`、`scripts/send-can-trace.sh` | 后续移植 CAN 字节编码和 SocketCAN |
 | 文件工具 | `modules/util/fs_io.c`、`modules/util/fs_utils.c` | `src/file_utils.c` | 后续增强目录创建、剩余空间检查 |

@@ -9,9 +9,11 @@
 - [ ] 交付自检提示通过。
 - [ ] 执行 `.\build\okmx8mm-a53-demo.exe --cycles 3`。
 - [ ] 生成 `runtime-data/a53-storage.jsonl`。
+- [ ] 生成 `runtime-data/a53-storage.jsonl.cursor`。
 - [ ] 生成 `runtime-data/a53-mqtt-outbox.jsonl`。
 - [ ] 生成 `runtime-data/a53-can-trace.log`。
 - [ ] 存储文件能看到 `ai0` 到 `ai9`。
+- [ ] 存储游标能看到 `sequence`。
 - [ ] CAN 记录能看到 `CAN id=0x321`。
 
 ## 开发板基础验收
