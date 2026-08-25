@@ -18,28 +18,40 @@ int main(void)
     if (expect_string(config.serial_device, "") != 0) {
         return 2;
     }
-
-    if (demo3_config_apply_line(&config, "serial_device = /dev/demo3-uart") != 0) {
+    if (expect_string(config.source, "modbus") != 0 ||
+        config.rpmsg_poll_timeout_ms != 1000) {
         return 3;
     }
-    if (demo3_config_apply_line(&config, "baudrate=115200") != 0) {
+
+    if (demo3_config_apply_line(&config, "serial_device = /dev/demo3-uart") != 0) {
         return 4;
     }
-    if (demo3_config_apply_line(&config, "sample_period_ms=200") != 0) {
+    if (demo3_config_apply_line(&config, "baudrate=115200") != 0) {
         return 5;
     }
-    if (demo3_config_apply_line(&config, "mqtt_enabled=true") != 0) {
+    if (demo3_config_apply_line(&config, "sample_period_ms=200") != 0) {
         return 6;
     }
-    if (demo3_config_apply_line(&config, "public_udp_port=7100") != 0) {
+    if (demo3_config_apply_line(&config, "mqtt_enabled=true") != 0) {
         return 7;
+    }
+    if (demo3_config_apply_line(&config, "public_udp_port=7100") != 0) {
+        return 8;
+    }
+    if (demo3_config_apply_line(&config, "source=rpmsg") != 0 ||
+        demo3_config_apply_line(&config, "rpmsg_device=/dev/rpmsg_demo3") != 0 ||
+        demo3_config_apply_line(&config, "rpmsg_poll_timeout_ms=250") != 0) {
+        return 9;
     }
     if (expect_string(config.serial_device, "/dev/demo3-uart") != 0 ||
         config.baudrate != 115200 ||
         config.sample_period_ms != 200 ||
         config.mqtt_enabled != 1 ||
-        config.public_udp_port != 7100) {
-        return 8;
+        config.public_udp_port != 7100 ||
+        expect_string(config.source, "rpmsg") != 0 ||
+        expect_string(config.rpmsg_device, "/dev/rpmsg_demo3") != 0 ||
+        config.rpmsg_poll_timeout_ms != 250) {
+        return 10;
     }
 
     return 0;

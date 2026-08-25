@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <termios.h>
 #include <pthread.h>
@@ -13,6 +14,7 @@
 #include "modbus-rtu/modbus-rtu.h"
 #include "public/public-udp-collector.h"
 #include "file-storage/file-storage.h"
+#include "bridge/demo3_rpmsg_service.h"
 #include "led/led.h"
 #include "gpio/gpio.h"
 #include "config/demo3_config.h"
@@ -67,6 +69,12 @@ int main(int argc, char **args) {
     m_log(M_LOG_INFO, "%s (version: %s, build: %s %s, commit: %s)", ABOUT_NAME, ABOUT_VERSION, __DATE__, __TIME__, ABOUT_COMMIT);
 
     m_log(M_LOG_INFO, "Network setup is provided by the OKMX8MM system configuration.");
+
+    if (strcmp(demo3_config.source, "modbus") != 0 &&
+        strcmp(demo3_config.source, "rpmsg") != 0) {
+        m_log(M_LOG_ERROR, "Unsupported data source '%s'", demo3_config.source);
+        return -1;
+    }
 
     if (demo3_config.sensor_power_enabled) {
         m_log(M_LOG_INFO, "Power cycling sensor supply ...");
@@ -123,7 +131,8 @@ int main(int argc, char **args) {
     modbus_rtu.stop_bits = demo3_config.stop_bits;
     modbus_rtu.parity_bits = demo3_config.parity_bits;
 
-    if (modbus_rtu.uart_name[0] == '\0' || modbus_rtu.bps == (speed_t)0) {
+    if (strcmp(demo3_config.source, "modbus") == 0 &&
+        (modbus_rtu.uart_name[0] == '\0' || modbus_rtu.bps == (speed_t)0)) {
         m_log(M_LOG_ERROR, "A valid serial_device and baudrate are required.");
         return -1;
     }
@@ -184,11 +193,24 @@ int main(int argc, char **args) {
         }
     }
 
-    // start modbus-rtu
+    // start the selected data source
     if (!has_error) {
-        int start_modbus_collector_ret = start_modbus_collector(&modbus_rtu);
-        if (start_modbus_collector_ret != 0) {
-            has_error = 1;
+        if (strcmp(demo3_config.source, "rpmsg") == 0) {
+            demo3_rpmsg_service_config_t rpmsg_config;
+            rpmsg_config.device_path = demo3_config.rpmsg_device;
+            rpmsg_config.local_storage_path = demo3_config.local_storage_path;
+            rpmsg_config.sd_storage_path = demo3_config.sd_storage_path;
+            rpmsg_config.storage_file_name = demo3_config.storage_file_name;
+            rpmsg_config.storage_compress = demo3_config.storage_compress;
+            rpmsg_config.poll_timeout_ms = demo3_config.rpmsg_poll_timeout_ms;
+            if (start_demo3_rpmsg_collector(&rpmsg_config) != 0) {
+                has_error = 1;
+            }
+        } else {
+            int start_modbus_collector_ret = start_modbus_collector(&modbus_rtu);
+            if (start_modbus_collector_ret != 0) {
+                has_error = 1;
+            }
         }
     }
 

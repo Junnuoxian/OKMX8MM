@@ -1,3 +1,6 @@
+source=rpmsg
+rpmsg_device=/dev/rpmsg_demo3
+rpmsg_poll_timeout_ms=1000
 serial_device=/dev/ttyM4
 baudrate=9600
 sample_period_ms=1000

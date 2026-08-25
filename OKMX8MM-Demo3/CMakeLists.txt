@@ -23,6 +23,7 @@ target_include_directories(demo3_protocol PUBLIC
 add_library(demo3_a53_bridge STATIC
     data-collector-demo3/src/bridge/demo3_m4_rpmsg.c
     data-collector-demo3/src/bridge/demo3_rpmsg_bridge.c
+    data-collector-demo3/src/bridge/demo3_rpmsg_reader.c
     data-collector-demo3/src/bridge/demo3_storage.c
     data-collector-demo3/src/bridge/demo3_rpmsg_storage.c
 )
@@ -92,4 +93,10 @@ if(DEMO3_BUILD_HOST_TESTS)
     )
     target_link_libraries(test_demo3_a53_bridge PRIVATE demo3_a53_bridge)
     add_test(NAME demo3_a53_bridge COMMAND test_demo3_a53_bridge)
+
+    add_executable(test_demo3_rpmsg_reader
+        data-collector-demo3/tests/test_demo3_rpmsg_reader.c
+    )
+    target_link_libraries(test_demo3_rpmsg_reader PRIVATE demo3_a53_bridge)
+    add_test(NAME demo3_rpmsg_reader COMMAND test_demo3_rpmsg_reader)
 endif()

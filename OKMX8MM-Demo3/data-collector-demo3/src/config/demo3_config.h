@@ -5,6 +5,7 @@
 
 typedef struct {
     char log_file_prefix[DEMO3_CONFIG_TEXT_LENGTH];
+    char source[DEMO3_CONFIG_TEXT_LENGTH];
     char serial_device[DEMO3_CONFIG_TEXT_LENGTH];
     int baudrate;
     int start_bits;
@@ -35,6 +36,9 @@ typedef struct {
     char mqtt_broker[DEMO3_CONFIG_TEXT_LENGTH];
     int mqtt_port;
     char mqtt_topic[DEMO3_CONFIG_TEXT_LENGTH];
+
+    char rpmsg_device[DEMO3_CONFIG_TEXT_LENGTH];
+    int rpmsg_poll_timeout_ms;
 
     char public_udp_host[DEMO3_CONFIG_TEXT_LENGTH];
     int public_udp_port;

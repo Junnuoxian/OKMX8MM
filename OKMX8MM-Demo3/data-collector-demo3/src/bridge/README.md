@@ -1,3 +1,3 @@
 # M4 数据接收
 
-接收 M4 转发的采样数据并交给 data-collector 主体处理。
+读取 Linux RPMsg 设备帧，完成校验后交给 data-collector 主体处理并写入文件存储。

@@ -72,6 +72,7 @@ void demo3_config_init(demo3_config_t *config)
 {
     memset(config, 0, sizeof(*config));
     (void)copy_value(config->log_file_prefix, "./runtime-data/data-collector");
+    (void)copy_value(config->source, "modbus");
     (void)copy_value(config->local_storage_path, "./runtime-data/data");
     (void)copy_value(config->sd_storage_path, "./runtime-data/sd");
     (void)copy_value(config->storage_file_name, "sample");
@@ -87,6 +88,7 @@ void demo3_config_init(demo3_config_t *config)
     config->sample_period_ms = 1000;
     config->mysql_port = 3306;
     config->mqtt_port = 1883;
+    config->rpmsg_poll_timeout_ms = 1000;
     config->public_udp_port = 7000;
 }
 
@@ -114,6 +116,7 @@ int demo3_config_apply_line(demo3_config_t *config, const char *line)
     key = trim(key);
 
     APPLY_STRING("log_file_prefix", log_file_prefix);
+    APPLY_STRING("source", source);
     APPLY_STRING("serial_device", serial_device);
     APPLY_INT("baudrate", baudrate);
     APPLY_INT("start_bits", start_bits);
@@ -140,6 +143,8 @@ int demo3_config_apply_line(demo3_config_t *config, const char *line)
     APPLY_STRING("mqtt_broker", mqtt_broker);
     APPLY_INT("mqtt_port", mqtt_port);
     APPLY_STRING("mqtt_topic", mqtt_topic);
+    APPLY_STRING("rpmsg_device", rpmsg_device);
+    APPLY_INT("rpmsg_poll_timeout_ms", rpmsg_poll_timeout_ms);
     APPLY_STRING("public_udp_host", public_udp_host);
     APPLY_INT("public_udp_port", public_udp_port);
 
