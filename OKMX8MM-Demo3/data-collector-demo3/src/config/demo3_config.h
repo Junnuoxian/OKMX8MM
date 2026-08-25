@@ -40,6 +40,10 @@ typedef struct {
     char rpmsg_device[DEMO3_CONFIG_TEXT_LENGTH];
     int rpmsg_poll_timeout_ms;
 
+    int can_enabled;
+    char can_interface[DEMO3_CONFIG_TEXT_LENGTH];
+    int can_id_base;
+
     char public_udp_host[DEMO3_CONFIG_TEXT_LENGTH];
     int public_udp_port;
 } demo3_config_t;

@@ -19,7 +19,8 @@ int main(void)
         return 2;
     }
     if (expect_string(config.source, "modbus") != 0 ||
-        config.rpmsg_poll_timeout_ms != 1000) {
+        config.rpmsg_poll_timeout_ms != 1000 || config.can_enabled != 0 ||
+        config.can_id_base != 0x300) {
         return 3;
     }
 
@@ -40,7 +41,10 @@ int main(void)
     }
     if (demo3_config_apply_line(&config, "source=rpmsg") != 0 ||
         demo3_config_apply_line(&config, "rpmsg_device=/dev/rpmsg_demo3") != 0 ||
-        demo3_config_apply_line(&config, "rpmsg_poll_timeout_ms=250") != 0) {
+        demo3_config_apply_line(&config, "rpmsg_poll_timeout_ms=250") != 0 ||
+        demo3_config_apply_line(&config, "can_enabled=true") != 0 ||
+        demo3_config_apply_line(&config, "can_interface=can0") != 0 ||
+        demo3_config_apply_line(&config, "can_id_base=768") != 0) {
         return 9;
     }
     if (expect_string(config.serial_device, "/dev/demo3-uart") != 0 ||
@@ -50,7 +54,9 @@ int main(void)
         config.public_udp_port != 7100 ||
         expect_string(config.source, "rpmsg") != 0 ||
         expect_string(config.rpmsg_device, "/dev/rpmsg_demo3") != 0 ||
-        config.rpmsg_poll_timeout_ms != 250) {
+        config.rpmsg_poll_timeout_ms != 250 || config.can_enabled != 1 ||
+        expect_string(config.can_interface, "can0") != 0 ||
+        config.can_id_base != 768) {
         return 10;
     }
 

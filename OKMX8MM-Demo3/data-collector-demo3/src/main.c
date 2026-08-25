@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <termios.h>
@@ -203,6 +204,9 @@ int main(int argc, char **args) {
             rpmsg_config.storage_file_name = demo3_config.storage_file_name;
             rpmsg_config.storage_compress = demo3_config.storage_compress;
             rpmsg_config.poll_timeout_ms = demo3_config.rpmsg_poll_timeout_ms;
+            rpmsg_config.can_enabled = demo3_config.can_enabled;
+            rpmsg_config.can_interface = demo3_config.can_interface;
+            rpmsg_config.can_id_base = (uint32_t)demo3_config.can_id_base;
             if (start_demo3_rpmsg_collector(&rpmsg_config) != 0) {
                 has_error = 1;
             }

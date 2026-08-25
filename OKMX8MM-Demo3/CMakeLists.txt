@@ -20,6 +20,15 @@ target_include_directories(demo3_protocol PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/common/protocol
 )
 
+add_library(demo3_can STATIC
+    data-collector-demo3/src/can/demo3_can.c
+)
+target_include_directories(demo3_can PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/data-collector-demo3/src/can
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/protocol
+)
+target_link_libraries(demo3_can PUBLIC demo3_protocol)
+
 add_library(demo3_a53_bridge STATIC
     data-collector-demo3/src/bridge/demo3_m4_rpmsg.c
     data-collector-demo3/src/bridge/demo3_rpmsg_bridge.c
@@ -99,4 +108,10 @@ if(DEMO3_BUILD_HOST_TESTS)
     )
     target_link_libraries(test_demo3_rpmsg_reader PRIVATE demo3_a53_bridge)
     add_test(NAME demo3_rpmsg_reader COMMAND test_demo3_rpmsg_reader)
+
+    add_executable(test_demo3_can
+        data-collector-demo3/tests/test_demo3_can.c
+    )
+    target_link_libraries(test_demo3_can PRIVATE demo3_can)
+    add_test(NAME demo3_can COMMAND test_demo3_can)
 endif()
