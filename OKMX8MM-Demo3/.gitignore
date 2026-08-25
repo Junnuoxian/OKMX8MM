@@ -1,0 +1,13 @@
+build/
+out/
+runtime-data/
+packages/
+*.log
+*.elf
+*.hex
+*.bin
+*.map
+*.o
+*.d
+private.env
+*.local

@@ -1,0 +1,16 @@
+serial_device=/dev/ttyM4
+baudrate=9600
+sample_period_ms=1000
+local_storage_path=/var/lib/demo3/data
+sd_storage_path=/media/sdcard/demo3
+storage_file_name=sample
+storage_compress=false
+sensor_power_enabled=false
+led_enabled=false
+mysql_enabled=false
+mqtt_enabled=false
+mqtt_broker=
+mqtt_port=1883
+mqtt_topic=mine/demo3/sample
+public_udp_host=0.0.0.0
+public_udp_port=7000

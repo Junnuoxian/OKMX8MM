@@ -1,0 +1,11 @@
+
+How to build the project
+
+1. Install dependencies, includeing cmake, cross-compile toolchain for your target.
+2. Open CMakeLists.txt, modify the mysql client library path.
+3. Goto 'build' directory, run 'run.sh', which will build the project and scp the executables to the targets, you can modify your target IP address here.
+
+
+NOTE: 
+1. To successfully run the cmake, you need to install gcc and g++.
+2. See CMakeList.txt, you need to set the mysql client library path.
