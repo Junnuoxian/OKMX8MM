@@ -37,6 +37,19 @@ static uint32_t join_unsigned32(uint16_t high, uint16_t low)
     return ((uint32_t)high << 16u) | (uint32_t)low;
 }
 
+static void split_signed32(int32_t value, uint16_t *high, uint16_t *low)
+{
+    uint32_t raw = (uint32_t)value;
+    *high = (uint16_t)(raw >> 16u);
+    *low = (uint16_t)(raw & 0xFFFFu);
+}
+
+static void split_unsigned32(uint32_t value, uint16_t *high, uint16_t *low)
+{
+    *high = (uint16_t)(value >> 16u);
+    *low = (uint16_t)(value & 0xFFFFu);
+}
+
 int demo3_sample_from_registers(const uint16_t *registers,
                                 size_t register_count,
                                 demo3_sample_t *sample)
@@ -60,5 +73,29 @@ int demo3_sample_from_registers(const uint16_t *registers,
     sample->speed_rpm = join_unsigned32(registers[21], registers[22]);
     sample->flags = registers[23];
     sample->sequence = join_unsigned32(registers[24], registers[25]);
+    return 0;
+}
+
+int demo3_sample_to_registers(const demo3_sample_t *sample,
+                              uint16_t *registers,
+                              size_t register_count)
+{
+    size_t channel;
+
+    if (sample == 0 || registers == 0) {
+        return -1;
+    }
+    if (register_count < DEMO3_MODBUS_REGISTER_COUNT) {
+        return -2;
+    }
+    for (channel = 0u; channel < DEMO3_ANALOG_CHANNEL_COUNT; ++channel) {
+        split_signed32(sample->analog[channel],
+                       &registers[channel * 2u],
+                       &registers[channel * 2u + 1u]);
+    }
+    registers[20] = sample->digital_bits;
+    split_unsigned32(sample->speed_rpm, &registers[21], &registers[22]);
+    registers[23] = sample->flags;
+    split_unsigned32(sample->sequence, &registers[24], &registers[25]);
     return 0;
 }

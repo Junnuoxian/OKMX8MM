@@ -1,0 +1,25 @@
+import os
+
+from building import *
+
+cwd = GetCurrentDir()
+src = Split('''
+Bsp/demo3_stm32f407_board.c
+applications/acquisition/demo3_acquisition.c
+applications/can/demo3_can.c
+applications/rs485/demo3_modbus_codec.c
+applications/rs485/demo3_modbus_slave.c
+../../common/protocol/demo3_protocol.c
+''')
+
+cpppath = [
+    cwd,
+    cwd + '/Bsp',
+    cwd + '/applications/acquisition',
+    cwd + '/applications/can',
+    cwd + '/applications/rs485',
+    os.path.abspath(cwd + '/../../common/protocol'),
+]
+
+group = DefineGroup('Demo3 STM32F407', src, depend=[''], CPPPATH=cpppath)
+Return('group')

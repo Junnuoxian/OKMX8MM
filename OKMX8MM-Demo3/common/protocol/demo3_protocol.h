@@ -30,5 +30,8 @@ uint16_t demo3_crc16_modbus(const uint8_t *data, uint32_t length);
 int demo3_sample_from_registers(const uint16_t *registers,
                                 size_t register_count,
                                 demo3_sample_t *sample);
+int demo3_sample_to_registers(const demo3_sample_t *sample,
+                              uint16_t *registers,
+                              size_t register_count);
 
 #endif

@@ -75,6 +75,11 @@ target_include_directories(demo3_config PUBLIC
 )
 
 option(DEMO3_BUILD_HOST_TESTS "Build host-side protocol tests" ON)
+option(DEMO3_BUILD_STM32F407 "Build STM32F407 HAL object target" OFF)
+
+if(DEMO3_BUILD_STM32F407)
+    add_subdirectory(stm32f407)
+endif()
 
 if(DEMO3_BUILD_HOST_TESTS)
     enable_testing()
@@ -155,4 +160,15 @@ if(DEMO3_BUILD_HOST_TESTS)
     )
     target_link_libraries(test_demo3_ota PRIVATE demo3_ota)
     add_test(NAME demo3_ota COMMAND test_demo3_ota)
+
+    add_executable(test_demo3_stm32_modbus_codec
+        tests/test_demo3_stm32_modbus_codec.c
+        stm32f407/applications/rs485/demo3_modbus_codec.c
+    )
+    target_include_directories(test_demo3_stm32_modbus_codec PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/stm32f407/applications/rs485
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/protocol
+    )
+    target_link_libraries(test_demo3_stm32_modbus_codec PRIVATE demo3_protocol)
+    add_test(NAME demo3_stm32_modbus_codec COMMAND test_demo3_stm32_modbus_codec)
 endif()
