@@ -21,7 +21,10 @@ int main(void)
     if (expect_string(config.source, "modbus") != 0 ||
         config.rpmsg_poll_timeout_ms != 1000 || config.can_enabled != 0 ||
         config.can_id_base != 0x300 ||
-        expect_string(config.mqtt_client_id, "demo3") != 0) {
+        expect_string(config.mqtt_client_id, "demo3") != 0 ||
+        config.status_enabled != 1 ||
+        expect_string(config.status_path, "./runtime-data/demo3-status.json") != 0 ||
+        config.ota_enabled != 0) {
         return 3;
     }
 
@@ -46,7 +49,10 @@ int main(void)
         demo3_config_apply_line(&config, "can_enabled=true") != 0 ||
         demo3_config_apply_line(&config, "can_interface=can0") != 0 ||
         demo3_config_apply_line(&config, "can_id_base=768") != 0 ||
-        demo3_config_apply_line(&config, "mqtt_client_id=demo3-gateway") != 0) {
+        demo3_config_apply_line(&config, "mqtt_client_id=demo3-gateway") != 0 ||
+        demo3_config_apply_line(&config, "status_enabled=false") != 0 ||
+        demo3_config_apply_line(&config, "ota_enabled=true") != 0 ||
+        demo3_config_apply_line(&config, "ota_package_path=/tmp/demo3.pkg") != 0) {
         return 9;
     }
     if (expect_string(config.serial_device, "/dev/demo3-uart") != 0 ||
@@ -59,7 +65,9 @@ int main(void)
         config.rpmsg_poll_timeout_ms != 250 || config.can_enabled != 1 ||
         expect_string(config.can_interface, "can0") != 0 ||
         config.can_id_base != 768 ||
-        expect_string(config.mqtt_client_id, "demo3-gateway") != 0) {
+        expect_string(config.mqtt_client_id, "demo3-gateway") != 0 ||
+        config.status_enabled != 0 || config.ota_enabled != 1 ||
+        expect_string(config.ota_package_path, "/tmp/demo3.pkg") != 0) {
         return 10;
     }
 

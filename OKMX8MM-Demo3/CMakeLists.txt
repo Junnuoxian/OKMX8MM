@@ -38,6 +38,20 @@ target_include_directories(demo3_mqtt PUBLIC
 )
 target_link_libraries(demo3_mqtt PUBLIC demo3_protocol)
 
+add_library(demo3_runtime_status STATIC
+    data-collector-demo3/src/runtime/demo3_runtime_status.c
+)
+target_include_directories(demo3_runtime_status PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/data-collector-demo3/src
+)
+
+add_library(demo3_ota STATIC
+    data-collector-demo3/src/ota/demo3_ota.c
+)
+target_include_directories(demo3_ota PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/data-collector-demo3/src
+)
+
 add_library(demo3_a53_bridge STATIC
     data-collector-demo3/src/bridge/demo3_m4_rpmsg.c
     data-collector-demo3/src/bridge/demo3_rpmsg_bridge.c
@@ -129,4 +143,16 @@ if(DEMO3_BUILD_HOST_TESTS)
     )
     target_link_libraries(test_demo3_mqtt PRIVATE demo3_mqtt)
     add_test(NAME demo3_mqtt COMMAND test_demo3_mqtt)
+
+    add_executable(test_demo3_runtime_status
+        data-collector-demo3/tests/test_demo3_runtime_status.c
+    )
+    target_link_libraries(test_demo3_runtime_status PRIVATE demo3_runtime_status)
+    add_test(NAME demo3_runtime_status COMMAND test_demo3_runtime_status)
+
+    add_executable(test_demo3_ota
+        data-collector-demo3/tests/test_demo3_ota.c
+    )
+    target_link_libraries(test_demo3_ota PRIVATE demo3_ota)
+    add_test(NAME demo3_ota COMMAND test_demo3_ota)
 endif()

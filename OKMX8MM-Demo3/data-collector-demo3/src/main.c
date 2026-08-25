@@ -16,6 +16,7 @@
 #include "public/public-udp-collector.h"
 #include "file-storage/file-storage.h"
 #include "bridge/demo3_rpmsg_service.h"
+#include "ota/demo3_ota.h"
 #include "led/led.h"
 #include "gpio/gpio.h"
 #include "config/demo3_config.h"
@@ -31,6 +32,26 @@ static speed_t demo3_baudrate_to_speed(int baudrate)
         case 115200: return B115200;
         default: return (speed_t)0;
     }
+}
+
+static int demo3_prepare_parent_directory(const char *path)
+{
+    char parent[DEMO3_CONFIG_TEXT_LENGTH];
+    char *separator;
+
+    if (path == 0 || strlen(path) >= sizeof(parent)) {
+        return -1;
+    }
+    (void)strcpy(parent, path);
+    separator = strrchr(parent, '/');
+    if (separator == 0) {
+        return 0;
+    }
+    *separator = '\0';
+    if (parent[0] == '\0' || strcmp(parent, ".") == 0) {
+        return 0;
+    }
+    return mkdirs(parent);
 }
 
 int main(int argc, char **args) {
@@ -70,6 +91,31 @@ int main(int argc, char **args) {
     m_log(M_LOG_INFO, "%s (version: %s, build: %s %s, commit: %s)", ABOUT_NAME, ABOUT_VERSION, __DATE__, __TIME__, ABOUT_COMMIT);
 
     m_log(M_LOG_INFO, "Network setup is provided by the OKMX8MM system configuration.");
+
+    int ota_staged = 0;
+    if (demo3_config.status_enabled &&
+        demo3_prepare_parent_directory(demo3_config.status_path) != 0) {
+        m_log(M_LOG_WARN, "Runtime status path is unavailable: %s",
+              demo3_config.status_path);
+        demo3_config.status_enabled = 0;
+    }
+    if (demo3_config.ota_enabled) {
+        if (demo3_config.ota_package_path[0] == '\0') {
+            m_log(M_LOG_WARN, "OTA is enabled but ota_package_path is empty.");
+        } else if (demo3_prepare_parent_directory(demo3_config.ota_staging_path) != 0 ||
+                   demo3_prepare_parent_directory(demo3_config.ota_reboot_marker_path) != 0 ||
+                   demo3_ota_stage_package(demo3_config.ota_package_path,
+                                           demo3_config.ota_staging_path) != 0 ||
+                   demo3_ota_write_reboot_marker(
+                       demo3_config.ota_reboot_marker_path,
+                       demo3_config.ota_staging_path) != 0) {
+            m_log(M_LOG_ERROR, "OTA package staging failed; collector continues.");
+        } else {
+            ota_staged = 1;
+            m_log(M_LOG_INFO,
+                  "OTA package staged; reboot is required for bootloader handling.");
+        }
+    }
 
     if (strcmp(demo3_config.source, "modbus") != 0 &&
         strcmp(demo3_config.source, "rpmsg") != 0) {
@@ -212,6 +258,9 @@ int main(int argc, char **args) {
             rpmsg_config.mqtt_port = demo3_config.mqtt_port;
             rpmsg_config.mqtt_topic = demo3_config.mqtt_topic;
             rpmsg_config.mqtt_client_id = demo3_config.mqtt_client_id;
+            rpmsg_config.status_enabled = demo3_config.status_enabled;
+            rpmsg_config.status_path = demo3_config.status_path;
+            rpmsg_config.ota_staged = ota_staged;
             if (start_demo3_rpmsg_collector(&rpmsg_config) != 0) {
                 has_error = 1;
             }

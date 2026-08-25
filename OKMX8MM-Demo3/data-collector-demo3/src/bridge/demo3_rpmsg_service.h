@@ -18,6 +18,9 @@ typedef struct {
     int mqtt_port;
     const char *mqtt_topic;
     const char *mqtt_client_id;
+    int status_enabled;
+    const char *status_path;
+    int ota_staged;
 } demo3_rpmsg_service_config_t;
 
 int start_demo3_rpmsg_collector(const demo3_rpmsg_service_config_t *config);

@@ -81,6 +81,11 @@ void demo3_config_init(demo3_config_t *config)
     (void)copy_value(config->mysql_database, "crrc-data-collector");
     (void)copy_value(config->mqtt_topic, "mine/demo3/sample");
     (void)copy_value(config->mqtt_client_id, "demo3");
+    (void)copy_value(config->status_path, "./runtime-data/demo3-status.json");
+    (void)copy_value(config->ota_staging_path,
+                     "./runtime-data/ota/demo3-update.pending");
+    (void)copy_value(config->ota_reboot_marker_path,
+                     "./runtime-data/ota/reboot-required.json");
     (void)copy_value(config->can_interface, "can0");
     (void)copy_value(config->public_udp_host, "0.0.0.0");
     config->baudrate = 9600;
@@ -90,6 +95,7 @@ void demo3_config_init(demo3_config_t *config)
     config->sample_period_ms = 1000;
     config->mysql_port = 3306;
     config->mqtt_port = 1883;
+    config->status_enabled = 1;
     config->rpmsg_poll_timeout_ms = 1000;
     config->can_id_base = 0x300;
     config->public_udp_port = 7000;
@@ -147,6 +153,12 @@ int demo3_config_apply_line(demo3_config_t *config, const char *line)
     APPLY_INT("mqtt_port", mqtt_port);
     APPLY_STRING("mqtt_topic", mqtt_topic);
     APPLY_STRING("mqtt_client_id", mqtt_client_id);
+    APPLY_BOOL("status_enabled", status_enabled);
+    APPLY_STRING("status_path", status_path);
+    APPLY_BOOL("ota_enabled", ota_enabled);
+    APPLY_STRING("ota_package_path", ota_package_path);
+    APPLY_STRING("ota_staging_path", ota_staging_path);
+    APPLY_STRING("ota_reboot_marker_path", ota_reboot_marker_path);
     APPLY_STRING("rpmsg_device", rpmsg_device);
     APPLY_INT("rpmsg_poll_timeout_ms", rpmsg_poll_timeout_ms);
     APPLY_BOOL("can_enabled", can_enabled);

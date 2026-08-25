@@ -38,6 +38,14 @@ typedef struct {
     char mqtt_topic[DEMO3_CONFIG_TEXT_LENGTH];
     char mqtt_client_id[DEMO3_CONFIG_TEXT_LENGTH];
 
+    int status_enabled;
+    char status_path[DEMO3_CONFIG_TEXT_LENGTH];
+
+    int ota_enabled;
+    char ota_package_path[DEMO3_CONFIG_TEXT_LENGTH];
+    char ota_staging_path[DEMO3_CONFIG_TEXT_LENGTH];
+    char ota_reboot_marker_path[DEMO3_CONFIG_TEXT_LENGTH];
+
     char rpmsg_device[DEMO3_CONFIG_TEXT_LENGTH];
     int rpmsg_poll_timeout_ms;
 
