@@ -13,6 +13,11 @@ typedef struct {
     int can_enabled;
     const char *can_interface;
     uint32_t can_id_base;
+    int mqtt_enabled;
+    const char *mqtt_broker;
+    int mqtt_port;
+    const char *mqtt_topic;
+    const char *mqtt_client_id;
 } demo3_rpmsg_service_config_t;
 
 int start_demo3_rpmsg_collector(const demo3_rpmsg_service_config_t *config);

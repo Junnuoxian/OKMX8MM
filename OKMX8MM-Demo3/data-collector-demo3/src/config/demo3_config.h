@@ -36,6 +36,7 @@ typedef struct {
     char mqtt_broker[DEMO3_CONFIG_TEXT_LENGTH];
     int mqtt_port;
     char mqtt_topic[DEMO3_CONFIG_TEXT_LENGTH];
+    char mqtt_client_id[DEMO3_CONFIG_TEXT_LENGTH];
 
     char rpmsg_device[DEMO3_CONFIG_TEXT_LENGTH];
     int rpmsg_poll_timeout_ms;

@@ -207,6 +207,11 @@ int main(int argc, char **args) {
             rpmsg_config.can_enabled = demo3_config.can_enabled;
             rpmsg_config.can_interface = demo3_config.can_interface;
             rpmsg_config.can_id_base = (uint32_t)demo3_config.can_id_base;
+            rpmsg_config.mqtt_enabled = demo3_config.mqtt_enabled;
+            rpmsg_config.mqtt_broker = demo3_config.mqtt_broker;
+            rpmsg_config.mqtt_port = demo3_config.mqtt_port;
+            rpmsg_config.mqtt_topic = demo3_config.mqtt_topic;
+            rpmsg_config.mqtt_client_id = demo3_config.mqtt_client_id;
             if (start_demo3_rpmsg_collector(&rpmsg_config) != 0) {
                 has_error = 1;
             }

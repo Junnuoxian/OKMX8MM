@@ -80,6 +80,7 @@ void demo3_config_init(demo3_config_t *config)
     (void)copy_value(config->mysql_user, "root");
     (void)copy_value(config->mysql_database, "crrc-data-collector");
     (void)copy_value(config->mqtt_topic, "mine/demo3/sample");
+    (void)copy_value(config->mqtt_client_id, "demo3");
     (void)copy_value(config->can_interface, "can0");
     (void)copy_value(config->public_udp_host, "0.0.0.0");
     config->baudrate = 9600;
@@ -145,6 +146,7 @@ int demo3_config_apply_line(demo3_config_t *config, const char *line)
     APPLY_STRING("mqtt_broker", mqtt_broker);
     APPLY_INT("mqtt_port", mqtt_port);
     APPLY_STRING("mqtt_topic", mqtt_topic);
+    APPLY_STRING("mqtt_client_id", mqtt_client_id);
     APPLY_STRING("rpmsg_device", rpmsg_device);
     APPLY_INT("rpmsg_poll_timeout_ms", rpmsg_poll_timeout_ms);
     APPLY_BOOL("can_enabled", can_enabled);
